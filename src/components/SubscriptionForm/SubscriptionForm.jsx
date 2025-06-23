@@ -91,8 +91,8 @@ const SubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
         margin="normal"
       >
         <MenuItem value="trial">Trial</MenuItem>
-        <MenuItem value="month">Monthly</MenuItem>
-        <MenuItem value="year">Yearly</MenuItem>
+        <MenuItem value="month">Month</MenuItem>
+        <MenuItem value="year">Year</MenuItem>
       </TextField>
 
       <TextField
@@ -103,7 +103,7 @@ const SubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
         onChange={handleChange}
         fullWidth
         margin="normal"
-        InputLabel={{ shrink: true }}
+        InputLabelProps={{ shrink: true }}
         required
       />
 
