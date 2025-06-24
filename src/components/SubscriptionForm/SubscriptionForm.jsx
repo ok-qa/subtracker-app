@@ -28,7 +28,7 @@ const SubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
     if (!form.name || !form.price || !form.endDate) return;
     const fullForm = {
       ...form,
-      id: isEdit ? form.id : crypto.randomUUID(), // keep ID if editing
+      id: isEdit ? form.id : crypto.randomUUID(),
       price: parseFloat(form.price),
     };
     onSubmit(fullForm);
