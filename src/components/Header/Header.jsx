@@ -1,4 +1,3 @@
-import SubscriptionSummary from "../SubscriptionSummary/SubscriptionSummary";
 import styles from "./Header.module.css";
 
 const Header = () => {

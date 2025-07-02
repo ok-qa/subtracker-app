@@ -11,6 +11,7 @@ import { useSubscriptions } from "../../../../assets/context/SubscriptionContext
 
 const SubscriptionList = () => {
   const { subscriptions, deleteSubscription } = useSubscriptions();
+
   const navigate = useNavigate();
 
   if (subscriptions.length === 0) {
@@ -30,6 +31,7 @@ const SubscriptionList = () => {
               <Typography variant="h6" gutterBottom>
                 {sub.name}
               </Typography>
+              <Typography variant="body2">Category: {sub.category}</Typography>
               <Typography variant="body2">Price: ${sub.price}</Typography>
               <Typography variant="body2">Term: {sub.term}</Typography>
               <Typography variant="body2">Ends: {sub.endDate}</Typography>

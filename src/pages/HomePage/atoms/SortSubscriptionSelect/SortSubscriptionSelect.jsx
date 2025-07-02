@@ -19,7 +19,7 @@ const SortSubscriptionSelect = () => {
         <option value="name-desc">Name Z → A</option>
         <option value="price-asc">Price Low → High</option>
         <option value="price-desc">Price High → Low</option>
-        <option value="term">Term (trial/month/year)</option>
+        <option value="term">Term (Trial/Month/Year)</option>
         <option value="end-date">End Date (Soonest)</option>
       </select>
     </div>
