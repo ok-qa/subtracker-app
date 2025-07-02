@@ -29,7 +29,7 @@ const CategoryFilter = () => {
   return (
     <Drawer
       variant="permanent"
-      anchor="left"
+      anchor="right"
       sx={{
         width: drawerWidth,
         flexShrink: 0,
