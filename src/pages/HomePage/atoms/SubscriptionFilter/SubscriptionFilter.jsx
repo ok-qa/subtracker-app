@@ -1,21 +1,24 @@
-
 import {
-  Drawer,
-  Box,
-  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+  Button,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Checkbox,
-  Button,
-} from '@mui/material';
-import { categories } from '../../../../assets/constants/categories';
-import { useSubscriptions } from '../../../../assets/context/SubscriptionContext';
+  Typography,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { categories } from "../../../../assets/constants/categories";
+import { useSubscriptions } from "../../../../assets/context/SubscriptionContext";
 
-const drawerWidth = 250;
+// const drawerWidth = 250;
 
-const CategoryFilter = () => {
+const CategoryFilter = ({ open, onClose }) => {
   const { categoryFilters, setCategoryFilters } = useSubscriptions();
 
   const toggleCategory = (cat) => {
@@ -27,25 +30,31 @@ const CategoryFilter = () => {
   const clearAll = () => setCategoryFilters([]);
 
   return (
-    <Drawer
-      variant="permanent"
-      anchor="right"
-      sx={{
-        width: drawerWidth,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: drawerWidth,
-          boxSizing: 'border-box',
-        },
-      }}
-    >
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h6" gutterBottom>
-          Categories
-        </Typography>
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
+      <DialogTitle>
+        <Typography variant="h5">Filter by Categories</Typography>
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+
+      <DialogContent dividers>
         <List>
           {categories.map((cat) => (
-            <ListItem key={cat} button onClick={() => toggleCategory(cat)} dense>
+            <ListItem
+              key={cat}
+              button
+              onClick={() => toggleCategory(cat)}
+              dense
+            >
               <ListItemIcon>
                 <Checkbox
                   edge="start"
@@ -57,13 +66,62 @@ const CategoryFilter = () => {
             </ListItem>
           ))}
         </List>
-        <Button variant="outlined" fullWidth sx={{ mt: 2 }} onClick={clearAll}>
-          Clear All
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={clearAll}>Clear All</Button>
+        <Button onClick={onClose} variant="contained">
+          Done
         </Button>
-      </Box>
-    </Drawer>
+      </DialogActions>
+    </Dialog>
+
+    // <Drawer anchor="right" open={open}>
+    //   <Box sx={{ width: 260, p: 2 }} role="presentation">
+    //     <IconButton
+    //       aria-label="close"
+    //       onClick={onClose}
+    //       sx={{
+    //         position: "absolute",
+    //         right: 8,
+    //         top: 8,
+    //       }}
+    //     >
+    //       <CloseIcon />
+    //     </IconButton>
+    //     <Typography variant="h6" mb={1}>
+    //       Filter by Category
+    //     </Typography>
+    //     <List>
+    //       {categories.map((cat) => (
+    //         <ListItem
+    //           key={cat}
+    //           button
+    //           onClick={() => toggleCategory(cat)}
+    //           dense
+    //         >
+    //           <ListItemIcon>
+    //             <Checkbox
+    //               edge="start"
+    //               checked={categoryFilters.includes(cat)}
+    //               tabIndex={-1}
+    //               disableRipple
+    //               inputProps={{
+    //                 "aria-labelledby": `checkbox-list-label-${cat}`,
+    //               }}
+    //             />
+    //           </ListItemIcon>
+    //           <ListItemText id={`checkbox-list-label-${cat}`} primary={cat} />
+    //         </ListItem>
+    //       ))}
+    //     </List>
+
+    //     <Button variant="outlined" fullWidth sx={{ mt: 2 }} onClick={clearAll}>
+    //       Clear All
+    //     </Button>
+    //   </Box>
+    // </Drawer>
   );
 };
-
 
 export default CategoryFilter;
