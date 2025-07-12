@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IconButton, Box, Typography } from "@mui/material";
+import { IconButton, Box, Typography, Button } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SubscriptionList from "../SubscriptionList/SubscriptionList";
 import SortSubscriptionSelect from "../SortSubscriptionSelect/SortSubscriptionSelect";
@@ -14,9 +14,14 @@ const SubscriptionSection = () => {
       <Typography variant="h4" align="center" gutterBottom>
         My Subscriptions
       </Typography>
-      <IconButton onClick={() => setFilterOpen(true)}>
-        <FilterListIcon />
-      </IconButton>
+      <Button
+        variant="contained"
+        sx={{ borderRadius: "20px" }}
+        startIcon={<FilterListIcon />}
+        onClick={() => setFilterOpen(true)}
+      >
+        Filter Subscriptions
+      </Button>
       <CategoryFilter open={filterOpen} onClose={() => setFilterOpen(false)} />
 
       <SubscriptionSummary />
