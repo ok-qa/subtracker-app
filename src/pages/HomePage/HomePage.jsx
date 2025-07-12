@@ -8,7 +8,7 @@ const HomePage = () => {
     <>
       <Header />
       {/* <CategoryFilter /> */}
-      <AddSubscriptionBtn />
+      {/* <AddSubscriptionBtn /> */}
       <SubscriptionSection />
     </>
   );

@@ -7,7 +7,7 @@ import {
   Grid,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useSubscriptions } from "../../../../assets/context/SubscriptionContext";
+import { useSubscriptions } from "../../../../context/SubscriptionContext";
 
 const SubscriptionList = () => {
   const { subscriptions, deleteSubscription } = useSubscriptions();

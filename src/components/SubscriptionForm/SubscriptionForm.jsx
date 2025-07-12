@@ -1,6 +1,6 @@
 import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import { categories } from "../../assets/constants/categories";
+import { categories } from "../../constants/categories";
 
 const initialState = {
   name: "",

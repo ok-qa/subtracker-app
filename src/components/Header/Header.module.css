@@ -1,10 +1,11 @@
 .header {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
+
+  justify-content: space-between;
   align-content: space-around;
 }
 .title {
   font: bold;
+  margin-left: 30px;
+  margin-right: 30px;
 }

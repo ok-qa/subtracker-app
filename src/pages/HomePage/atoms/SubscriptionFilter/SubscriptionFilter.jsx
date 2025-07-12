@@ -13,8 +13,8 @@ import {
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { categories } from "../../../../assets/constants/categories";
-import { useSubscriptions } from "../../../../assets/context/SubscriptionContext";
+import { categories } from "../../../../constants/categories";
+import { useSubscriptions } from "../../../../context/SubscriptionContext";
 
 // const drawerWidth = 250;
 
@@ -75,52 +75,6 @@ const CategoryFilter = ({ open, onClose }) => {
         </Button>
       </DialogActions>
     </Dialog>
-
-    // <Drawer anchor="right" open={open}>
-    //   <Box sx={{ width: 260, p: 2 }} role="presentation">
-    //     <IconButton
-    //       aria-label="close"
-    //       onClick={onClose}
-    //       sx={{
-    //         position: "absolute",
-    //         right: 8,
-    //         top: 8,
-    //       }}
-    //     >
-    //       <CloseIcon />
-    //     </IconButton>
-    //     <Typography variant="h6" mb={1}>
-    //       Filter by Category
-    //     </Typography>
-    //     <List>
-    //       {categories.map((cat) => (
-    //         <ListItem
-    //           key={cat}
-    //           button
-    //           onClick={() => toggleCategory(cat)}
-    //           dense
-    //         >
-    //           <ListItemIcon>
-    //             <Checkbox
-    //               edge="start"
-    //               checked={categoryFilters.includes(cat)}
-    //               tabIndex={-1}
-    //               disableRipple
-    //               inputProps={{
-    //                 "aria-labelledby": `checkbox-list-label-${cat}`,
-    //               }}
-    //             />
-    //           </ListItemIcon>
-    //           <ListItemText id={`checkbox-list-label-${cat}`} primary={cat} />
-    //         </ListItem>
-    //       ))}
-    //     </List>
-
-    //     <Button variant="outlined" fullWidth sx={{ mt: 2 }} onClick={clearAll}>
-    //       Clear All
-    //     </Button>
-    //   </Box>
-    // </Drawer>
   );
 };
 

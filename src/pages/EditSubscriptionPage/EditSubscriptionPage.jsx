@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import SubscriptionForm from "../../components/SubscriptionForm/SubscriptionForm";
 
 import Header from "../../components/Header/Header";
-import { useSubscriptions } from "../../assets/context/SubscriptionContext";
+import { useSubscriptions } from "../../context/SubscriptionContext";
 
 const EditSubscriptionPage = () => {
   const { id } = useParams();

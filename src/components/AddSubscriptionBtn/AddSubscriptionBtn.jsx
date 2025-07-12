@@ -1,19 +1,24 @@
-import { Fab } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Box, Button } from "@mui/material";
 
-const AddSubscriptionBtn = () => {
+export default function AddSubscriptionBtn() {
   const navigate = useNavigate();
 
   return (
-    <Fab
-      variant="extended"
-      size="medium"
-      color="primary"
-      onClick={() => navigate("/add")}
+    <Box
+      display="inline-flex"
+      justifyContent="center"
+      alignItems="center"
+      // width="100%"
     >
-      Add Subscription
-    </Fab>
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{ borderRadius: "20px" }}
+        onClick={() => navigate("/add")}
+      >
+        Add Subscription
+      </Button>
+    </Box>
   );
-};
-
-export default AddSubscriptionBtn;
+}

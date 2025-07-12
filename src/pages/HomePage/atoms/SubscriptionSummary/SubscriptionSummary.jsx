@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { useSubscriptions } from "../../../../assets/context/SubscriptionContext";
-
+import { useSubscriptions } from "../../../../context/SubscriptionContext";
 
 const SubscriptionSummary = () => {
   const { totalCostMonthly } = useSubscriptions();

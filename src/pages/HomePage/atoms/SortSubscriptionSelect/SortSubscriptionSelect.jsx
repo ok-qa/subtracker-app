@@ -1,4 +1,4 @@
-import { useSubscriptions } from "../../../../assets/context/SubscriptionContext";
+import { useSubscriptions } from "../../../../context/SubscriptionContext";
 import styles from "./SortSubscriptionSelect.module.css";
 
 const SortSubscriptionSelect = () => {
