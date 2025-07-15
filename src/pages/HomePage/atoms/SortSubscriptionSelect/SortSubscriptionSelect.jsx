@@ -14,7 +14,7 @@ const SortSubscriptionSelect = () => {
           setSortOption(e.target.value);
         }}
       >
-        <option value="">-- Select --</option>
+        {/* <option value="">-- Select --</option> */}
         <option value="name-asc">Name A → Z</option>
         <option value="name-desc">Name Z → A</option>
         <option value="price-asc">Price Low → High</option>

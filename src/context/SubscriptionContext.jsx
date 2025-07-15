@@ -8,7 +8,7 @@ export const SubscriptionProvider = ({ children }) => {
     const stored = localStorage.getItem("subscriptions");
     return stored ? JSON.parse(stored) : [];
   });
-  const [sortOption, setSortOption] = useState("");
+  const [sortOption, setSortOption] = useState("name-asc");
   const [categoryFilters, setCategoryFilters] = useState([]);
 
   // Sync to localStorage
