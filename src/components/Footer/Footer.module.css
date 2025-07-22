@@ -1,0 +1,15 @@
+.footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  width: 100%;
+  background-color: #ccc;
+
+  position: sticky;
+  bottom: 0;
+}
+
+.text {
+  margin-right: 16px;
+}

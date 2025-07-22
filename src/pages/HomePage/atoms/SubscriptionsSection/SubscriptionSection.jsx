@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IconButton, Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SubscriptionList from "../SubscriptionList/SubscriptionList";
 import SortSubscriptionSelect from "../SortSubscriptionSelect/SortSubscriptionSelect";
@@ -10,7 +10,7 @@ const SubscriptionSection = () => {
   const [filterOpen, setFilterOpen] = useState(false);
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 2, width: "100%", flex: 1 }}>
       <Typography variant="h4" align="center" gutterBottom>
         My Subscriptions
       </Typography>

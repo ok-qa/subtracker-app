@@ -9,10 +9,14 @@ export const getInitialSubscriptions = () => {
   }
 };
 
-// //save subscription whenever it changes
-// export const updateSub = useEffect(() => {
-//   localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
-// }, [subscriptions]);
+//save subscription whenever it changes
+export const updateSubscription = (subscriptions) => {
+  try {
+    localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
+  } catch (error) {
+    console.error("Failed to update subscriptions:", error);
+  }
+};
 
 // // CRUD operations
 // const [subscriptions, setSubscriptions] = useState(() => {
