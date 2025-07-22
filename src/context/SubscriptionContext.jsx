@@ -1,19 +1,25 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import {
+  getInitialSubscriptions,
+  updateSubscription,
+} from "../api/localStorage";
 
 const SubscriptionContext = createContext();
 export const useSubscriptions = () => useContext(SubscriptionContext);
 
 export const SubscriptionProvider = ({ children }) => {
-  const [subscriptions, setSubscriptions] = useState(() => {
-    const stored = localStorage.getItem("subscriptions");
-    return stored ? JSON.parse(stored) : [];
-  });
-  const [sortOption, setSortOption] = useState("name-asc");
+  const [subscriptions, setSubscriptions] = useState(getInitialSubscriptions);
+  const [sortOption, setSortOption] = useState("name-desc");
   const [categoryFilters, setCategoryFilters] = useState([]);
 
   // Sync to localStorage
+  // useEffect(() => {
+  //   localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
+  // }, [subscriptions]);
+
   useEffect(() => {
-    localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
+    console.log("subscriptions", subscriptions);
+    updateSubscription(subscriptions);
   }, [subscriptions]);
 
   // CRUD operations
