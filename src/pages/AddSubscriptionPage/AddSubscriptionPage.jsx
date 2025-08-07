@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import SubscriptionForm from "../../components/SubscriptionForm/SubscriptionForm";
 import Header from "../../components/Header/Header";
 import { useSubscriptions } from "../../context/SubscriptionContext";
+import Footer from "../../components/Footer/Footer";
 
 const AddSubscriptionPage = () => {
   const { addSubscription } = useSubscriptions();
@@ -21,6 +22,7 @@ const AddSubscriptionPage = () => {
         isEdit={false}
         defaultValues={null}
       />
+      <Footer />
     </>
   );
 };

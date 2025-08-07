@@ -8,8 +8,6 @@ const HomePage = () => {
   return (
     <>
       <Header />
-      {/* <CategoryFilter /> */}
-      {/* <AddSubscriptionBtn /> */}
       <SubscriptionSection />
       <Footer />
     </>
