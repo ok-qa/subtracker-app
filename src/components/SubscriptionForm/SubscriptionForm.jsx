@@ -38,7 +38,7 @@ const SubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
     <Box
       component="form"
       onSubmit={handleSubmit}
-      sx={{ p: 2, maxWidth: 500, mx: "auto" }}
+      sx={{ p: 2, maxWidth: 500, mx: "auto", height: "100%" }}
     >
       <Typography variant="h5" mb={2}>
         {isEdit ? "Edit" : "Add"} Subscription

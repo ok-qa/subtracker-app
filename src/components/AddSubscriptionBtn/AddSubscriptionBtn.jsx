@@ -14,7 +14,7 @@ export default function AddSubscriptionBtn() {
       <Button
         variant="contained"
         color="primary"
-        sx={{ borderRadius: "20px" }}
+        sx={{ borderRadius: "20px", marginRight: "30px" }}
         onClick={() => navigate("/add")}
       >
         Add Subscription

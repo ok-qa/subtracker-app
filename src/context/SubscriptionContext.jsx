@@ -1,33 +1,37 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
+import {
+  getInitialSubscriptions,
+  editSubscription,
+  addSubscription,
+  deleteSubscription,
+} from "../api/index";
 
 const SubscriptionContext = createContext();
-export const useSubscriptions = () => useContext(SubscriptionContext);
 
 export const SubscriptionProvider = ({ children }) => {
-  const [subscriptions, setSubscriptions] = useState(() => {
-    const stored = localStorage.getItem("subscriptions");
-    return stored ? JSON.parse(stored) : [];
-  });
-  const [sortOption, setSortOption] = useState("name-asc");
+  const [subscriptions, setSubscriptions] = useState(getInitialSubscriptions());
+  const [sortOption, setSortOption] = useState("name-desc");
+
   const [categoryFilters, setCategoryFilters] = useState([]);
 
-  // Sync to localStorage
-  useEffect(() => {
-    localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
-  }, [subscriptions]);
-
   // CRUD operations
-  const addSubscription = (s) => setSubscriptions((prev) => [...prev, s]);
+  // add
+  const handleAddSubscription = (subscription) => {
+    addSubscription(subscription);
+    setSubscriptions(getInitialSubscriptions());
+  };
+  // edit
+  const handleEditSubscription = (updatedSubscription) => {
+    editSubscription(updatedSubscription);
+    setSubscriptions(getInitialSubscriptions()); // refresh state
+  };
 
-  const editSubscription = (updated) =>
-    setSubscriptions((prev) =>
-      prev.map((s) => (s.id === updated.id ? updated : s))
-    );
+  //delete
+  const handleDeleteSubscription = (id) => {
+    deleteSubscription(id);
+    setSubscriptions(getInitialSubscriptions()); // refresh state
+  };
 
-  const deleteSubscription = (id) =>
-    setSubscriptions((prev) => prev.filter((s) => s.id !== id));
-
-  // Derived data (no memo)
   const filteredSubs = subscriptions.filter((sub) =>
     categoryFilters.length ? categoryFilters.includes(sub.category) : true
   );
@@ -64,9 +68,9 @@ export const SubscriptionProvider = ({ children }) => {
     <SubscriptionContext.Provider
       value={{
         subscriptions: sortedSubscriptions,
-        addSubscription,
-        editSubscription,
-        deleteSubscription,
+        addSubscription: handleAddSubscription,
+        editSubscription: handleEditSubscription,
+        deleteSubscription: handleDeleteSubscription,
         setSortOption,
         sortOption,
         categoryFilters,
@@ -78,3 +82,5 @@ export const SubscriptionProvider = ({ children }) => {
     </SubscriptionContext.Provider>
   );
 };
+
+export const useSubscriptions = () => useContext(SubscriptionContext);
