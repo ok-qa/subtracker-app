@@ -17,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
+import styles from "./SettingsPage.module.css";
+
 const SettingsPage = () => {
   const navigate = useNavigate();
 
@@ -38,8 +40,8 @@ const SettingsPage = () => {
   };
 
   return (
-    <>
-      {" "}
+    <div className={styles.settingsPage}>
+      {/* {" "} */}
       <Header />
       <Box sx={{ p: 3 }}>
         <Typography variant="h4" gutterBottom>
@@ -98,7 +100,7 @@ const SettingsPage = () => {
         </Button>
       </Box>
       <Footer />
-    </>
+    </div>
   );
 };
 

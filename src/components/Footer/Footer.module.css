@@ -4,7 +4,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 8px 16px;
-  margin-right: 16px;
+  /* margin-right: 16px; */
 
   width: 100%;
   background-color: #ccc;
@@ -16,5 +16,5 @@
 .text {
   /* position: absolute; */
   /* right: 0; */
-  margin-left: 16px;
+  margin-right: 16px;
 }

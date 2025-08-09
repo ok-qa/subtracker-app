@@ -5,6 +5,8 @@ import Header from "../../components/Header/Header";
 import { useSubscriptions } from "../../context/SubscriptionContext";
 import Footer from "../../components/Footer/Footer";
 
+import styles from "./AddSubscriptionPage.module.css";
+
 const AddSubscriptionPage = () => {
   const { addSubscription } = useSubscriptions();
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ const AddSubscriptionPage = () => {
   };
 
   return (
-    <>
+    <div className={styles.addSubscriptionPage}>
       <Header />
       <SubscriptionForm
         onSubmit={handleSubmit}
@@ -23,7 +25,7 @@ const AddSubscriptionPage = () => {
         defaultValues={null}
       />
       <Footer />
-    </>
+    </div>
   );
 };
 
