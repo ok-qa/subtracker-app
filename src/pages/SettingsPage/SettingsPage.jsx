@@ -12,8 +12,9 @@ import {
   Paper,
   Button,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ThemeContext } from "../../context/ThemeContext";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
@@ -21,11 +22,13 @@ import styles from "./SettingsPage.module.css";
 
 const SettingsPage = () => {
   const navigate = useNavigate();
+  const { themeMode, setThemeMode } = useContext(ThemeContext);
 
   const [currency, setCurrency] = useState(
     () => localStorage.getItem("currency") || "usd"
   );
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  // const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
   const [notifications, setNotifications] = useState(() => {
     const saved = localStorage.getItem("notifications");
     return saved === null ? true : saved === "true";
@@ -33,7 +36,6 @@ const SettingsPage = () => {
 
   const handleSave = () => {
     localStorage.setItem("currency", currency);
-    localStorage.setItem("theme", theme);
     localStorage.setItem("notifications", notifications.toString());
 
     navigate("/");
@@ -41,7 +43,6 @@ const SettingsPage = () => {
 
   return (
     <div className={styles.settingsPage}>
-      {/* {" "} */}
       <Header />
       <div className={styles.settingsContent}>
         <Box sx={{ p: 3 }}>
@@ -74,8 +75,8 @@ const SettingsPage = () => {
             </Typography>
             <RadioGroup
               row
-              value={theme}
-              onChange={(e) => setTheme(e.target.value)}
+              value={themeMode}
+              onChange={(e) => setThemeMode(e.target.value)}
             >
               <FormControlLabel
                 value="light"

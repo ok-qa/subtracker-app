@@ -17,7 +17,12 @@ const Footer = () => {
           loadingPosition="center"
           size="small"
           variant="outlined"
-          sx={{ borderRadius: "20px", marginLeft: "16px" }}
+          sx={{
+            borderRadius: "20px",
+            marginLeft: "16px",
+            color: "white",
+            borderColor: "white",
+          }}
           startIcon={<Settings />}
         >
           Settings
