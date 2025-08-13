@@ -16,7 +16,7 @@ const SubscriptionSection = () => {
       </Typography>
       <Button
         variant="contained"
-        sx={{ borderRadius: "20px" }}
+        sx={{ borderRadius: "20px", marginLeft: "16px" }}
         startIcon={<FilterListIcon />}
         onClick={() => setFilterOpen(true)}
       >

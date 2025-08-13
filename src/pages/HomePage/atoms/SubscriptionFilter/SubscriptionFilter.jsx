@@ -16,6 +16,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { categories } from "../../../../constants/categories";
 import { useSubscriptions } from "../../../../context/SubscriptionContext";
 
+// import styles from "./SubscriptionFilter.module.css";
+
 // const drawerWidth = 250;
 
 const CategoryFilter = ({ open, onClose }) => {

@@ -38,8 +38,7 @@ export const editSubscription = (updated) => {
 
 // DELETE
 export const deleteSubscription = (id) => {
-  const subscriptions = getInitialSubscriptions().filter((subscription) => {
-    subscription.id !== id;
-  });
+  const subscriptions = getInitialSubscriptions().filter((subscription) => 
+    subscription.id !== id);
   updateSubscriptions(subscriptions);
 };
