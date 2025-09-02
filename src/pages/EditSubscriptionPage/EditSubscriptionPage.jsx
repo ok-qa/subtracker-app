@@ -3,6 +3,7 @@ import SubscriptionForm from "../../components/SubscriptionForm/SubscriptionForm
 
 import Header from "../../components/Header/Header";
 import { useSubscriptions } from "../../context/SubscriptionContext";
+import Footer from "../../components/Footer/Footer";
 
 const EditSubscriptionPage = () => {
   const { id } = useParams();
@@ -24,6 +25,7 @@ const EditSubscriptionPage = () => {
         defaultValues={existing}
         isEdit
       />
+      <Footer />
     </>
   );
 };
