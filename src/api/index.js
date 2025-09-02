@@ -38,7 +38,18 @@ export const editSubscription = (updated) => {
 
 // DELETE
 export const deleteSubscription = (id) => {
-  const subscriptions = getInitialSubscriptions().filter((subscription) => 
-    subscription.id !== id);
+  const subscriptions = getInitialSubscriptions().filter(
+    (subscription) => subscription.id !== id
+  );
   updateSubscriptions(subscriptions);
+};
+
+//get theme to localstorage
+export const getTheme = () => {
+  return localStorage.getItem("theme") || "light";
+};
+
+//save theme from localstorage
+export const setTheme = (theme) => {
+  localStorage.setItem("theme", theme);
 };
