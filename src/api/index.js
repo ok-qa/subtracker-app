@@ -1,55 +1,119 @@
-import { STORAGE_KEY } from "../constants";
+import { axiosInstance } from "./axios";
+import { categoriesRequest } from "./categories";
+import { termsRequest } from "./terms";
+import { subscriptionsRequests } from "./subscriptions";
+import { authRequests } from "./auth";
+
+export const api = {
+  ...authRequests(),
+  ...subscriptionsRequests(),
+  ...termsRequest(),
+  ...categoriesRequest(),
+  getBaseURL: () => axiosInstance.defaults.baseURL,
+  setAuthHeader: (token) =>
+    (axiosInstance.defaults.headers.common[
+      "Authorization"
+    ] = `Bearer ${token}`),
+  getAuthHeader: () => axiosInstance.defaults.headers.common["Authorization"],
+  clearAuthHeader: () => {
+    delete axiosInstance.defaults.headers.common["Authorization"];
+  },
+};
+
+//auth
+export const signUp = async (registerData) => {
+  const {
+    data: { data },
+  } = await api.registerRequest(registerData);
+  return data;
+};
+
+export const signIn = async (loginData) => {
+  const {
+    data: { data },
+  } = await api.loginRequest(loginData);
+  return data;
+};
+
+export const logout = async () => {
+  try {
+    await api.logoutRequest();
+  } catch (error) {
+    console.error("Failed to logout: ", error);
+  }
+};
 
 //get subscriptions
-export const getInitialSubscriptions = () => {
+export const getSubscriptions = async (params = {}) => {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
+    const parsedParams = {
+      page: params.page ? params.page : 1,
+      perPage: params.perPage ? params.perPage : 10,
+    };
+    const { data } = await api.getSubscriptionsRequest(parsedParams);
+    return data;
   } catch (error) {
     console.error("Failed to load subscriptions:", error);
+    return { data: [], total: 0, page: 1, perPage: 10, totalPages: 1 };
+  }
+};
+
+export const addSubscription = async (payload) => {
+  try {
+    const {
+      data: { data },
+    } = await api.createSubscriptionRequest(payload);
+    return data;
+  } catch (error) {
+    console.error("Failed to add subscription:", error);
+    throw error;
+  }
+};
+
+export const editSubscription = async (updatedId, payload) => {
+  try {
+    const {
+      data: { data },
+    } = await api.updateSubscriptionRequest(updatedId, payload);
+    return data;
+  } catch (error) {
+    console.error("Failed to update subscription:", error);
+    throw error;
+  }
+};
+
+export const deleteSubscription = async (id) => {
+  try {
+    await api.deleteSubscriptionRequest(id);
+    return id;
+  } catch (error) {
+    console.error("Failed to delete subscription:", error);
+    throw error;
+  }
+};
+
+//get categories
+export const getCategories = async () => {
+  try {
+    const {
+      data: { data },
+    } = await api.getCategoriesRequest();
+    return data;
+  } catch (error) {
+    console.error("Failed to load categories:", error);
     return [];
   }
 };
 
-//save subscription whenever it changes
-export const updateSubscriptions = (subscriptions) => {
+//get terms
+export const getTerms = async () => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(subscriptions));
+    const {
+      data: { data },
+    } = await api.getTermsRequest();
+    return data;
   } catch (error) {
-    console.error("Failed to update subscriptions:", error);
+    console.error("Failed to load terms:", error);
+    return [];
   }
-};
-
-// CRUD operations
-//POST
-export const addSubscription = (subscription) => {
-  const subscriptions = getInitialSubscriptions();
-  subscriptions.push(subscription);
-  updateSubscriptions(subscriptions);
-};
-
-//  UPDATE (PATCH)
-export const editSubscription = (updated) => {
-  const subscriptions = getInitialSubscriptions().map((subscription) =>
-    subscription.id === updated.id ? updated : subscription
-  );
-  updateSubscriptions(subscriptions);
-};
-
-// DELETE
-export const deleteSubscription = (id) => {
-  const subscriptions = getInitialSubscriptions().filter(
-    (subscription) => subscription.id !== id
-  );
-  updateSubscriptions(subscriptions);
-};
-
-//get theme to localstorage
-export const getTheme = () => {
-  return localStorage.getItem("theme") || "light";
-};
-
-//save theme from localstorage
-export const setTheme = (theme) => {
-  localStorage.setItem("theme", theme);
 };

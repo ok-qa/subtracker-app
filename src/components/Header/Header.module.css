@@ -21,3 +21,9 @@
   color: black;
   /* margin-right: 30px; */
 }
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* space between Add button and Logout */
+}

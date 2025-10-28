@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { getTheme, setTheme } from "../api";
+import { getTheme, setTheme } from "../localStorage";
 
 export const ThemeContextProvider = ({ children }) => {
   const [themeMode, setThemeMode] = useState(() => {
