@@ -1,22 +1,49 @@
 import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import { categories } from "../../constants/categories";
+import { getCategories, getTerms } from "../../api";
 
 const initialState = {
   name: "",
   price: "",
-  term: "Month",
+  category: "",
+  term: "",
   endDate: "",
 };
 
 const SubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
   const [form, setForm] = useState(initialState);
+  const [categories, setCategories] = useState([]);
+  const [terms, setTerms] = useState([]);
 
   useEffect(() => {
     if (defaultValues) {
-      setForm(defaultValues);
+      setForm({
+        ...defaultValues,
+        category: defaultValues.category?._id || defaultValues.category || "",
+        term: defaultValues.term?._id || defaultValues.term || "",
+        endDate: defaultValues.endDate
+          ? new Date(defaultValues.endDate).toISOString().split("T")[0]
+          : "",
+      });
     }
   }, [defaultValues]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [categories, terms] = await Promise.all([
+          getCategories(),
+          getTerms(),
+        ]);
+
+        setCategories(categories);
+        setTerms(terms);
+      } catch (err) {
+        console.error("Failed to load categories/terms", err);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,7 +55,7 @@ const SubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
     if (!form.name || !form.price || !form.endDate) return;
     const fullForm = {
       ...form,
-      id: isEdit ? form.id : crypto.randomUUID(),
+      id: isEdit ? form._id : undefined,
       price: parseFloat(form.price),
     };
     onSubmit(fullForm);
@@ -63,9 +90,9 @@ const SubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
         fullWidth
         required
       >
-        {categories.map((cat) => (
-          <MenuItem key={cat} value={cat}>
-            {cat}
+        {categories.map((category) => (
+          <MenuItem key={category.name} value={category._id}>
+            {category.name}
           </MenuItem>
         ))}
       </TextField>
@@ -90,9 +117,11 @@ const SubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
         fullWidth
         margin="normal"
       >
-        <MenuItem value="trial">Trial</MenuItem>
-        <MenuItem value="month">Month</MenuItem>
-        <MenuItem value="year">Year</MenuItem>
+        {terms.map((term) => (
+          <MenuItem key={term.name} value={term._id}>
+            {term.name}
+          </MenuItem>
+        ))}
       </TextField>
 
       <TextField

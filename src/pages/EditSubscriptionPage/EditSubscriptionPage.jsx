@@ -1,8 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
-import SubscriptionForm from "../../components/SubscriptionForm/SubscriptionForm";
-
-import Header from "../../components/Header/Header";
 import { useSubscriptions } from "../../context/SubscriptionContext";
+import SubscriptionForm from "../../components/SubscriptionForm/SubscriptionForm";
+import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
 const EditSubscriptionPage = () => {
@@ -10,19 +9,30 @@ const EditSubscriptionPage = () => {
   const { subscriptions, editSubscription } = useSubscriptions();
   const navigate = useNavigate();
 
-  const existing = subscriptions.find((s) => s.id === id);
+  const existing = subscriptions.find(
+    (subscription) => subscription._id === id
+  );
+  const defaultValues = existing
+    ? {
+        ...existing,
+        term: existing.term?._id || existing.term,
+        category: existing.category?._id || existing.category,
+      }
+    : null;
 
-  const handleSubmit = (updated) => {
-    editSubscription(updated);
+  const handleSubmit = async (updated) => {
+    await editSubscription(updated);
     navigate("/");
   };
+
+  //if (!existing) return <p>Loading...</p>;
 
   return (
     <>
       <Header />
       <SubscriptionForm
         onSubmit={handleSubmit}
-        defaultValues={existing}
+        defaultValues={defaultValues}
         isEdit
       />
       <Footer />
