@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as BrowserLink } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import {
   Avatar,
@@ -148,7 +148,7 @@ const SignUpPage = () => {
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid>
-                  <Link href="/signin" variant="body2">
+                  <Link component={BrowserLink} to="/signin" variant="body2">
                     Already have an account? Sign in
                   </Link>
                 </Grid>

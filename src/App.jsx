@@ -13,6 +13,8 @@ import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 
 import styles from "./App.module.css";
 
+const authRoutes = ["/reset-password", "/forgot-password", "/register"];
+
 function App() {
   const { token } = useSelector((state) => state.app);
   const navigate = useNavigate();
@@ -21,10 +23,7 @@ function App() {
   useEffect(() => {
     if (token) {
       api.setAuthHeader(token);
-    } else if (
-      location.pathname !== "/reset-password" &&
-      location.pathname !== "/forgot-password"
-    ) {
+    } else if (!authRoutes.includes(location.pathname)) {
       navigate("/signin");
     }
   }, [token, navigate]);

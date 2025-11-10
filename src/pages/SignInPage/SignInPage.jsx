@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Link as BrowserLink } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import {
   Avatar,
@@ -116,12 +117,16 @@ const SignInPage = () => {
 
               <Grid container>
                 <Grid size={{ xs: 12 }}>
-                  <Link href="/forgot-password" variant="body2">
+                  <Link
+                    component={BrowserLink}
+                    to="/forgot-password"
+                    variant="body2"
+                  >
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                  <Link href="/register" variant="body2">
+                  <Link component={BrowserLink} to="/register" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
