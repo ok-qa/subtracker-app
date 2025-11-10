@@ -39,9 +39,6 @@ const SignInPage = () => {
 
   const handleSubmit = async (values, formikHelpers) => {
     try {
-      console.log("SignInPage values", values);
-      console.log("formikHelpers", formikHelpers);
-
       await signIn(values, dispatch);
       navigate("/");
     } catch (error) {
@@ -119,7 +116,7 @@ const SignInPage = () => {
 
               <Grid container>
                 <Grid size={{ xs: 12 }}>
-                  <Link href="#" variant="body2">
+                  <Link href="/forgot-password" variant="body2">
                     Forgot password?
                   </Link>
                 </Grid>

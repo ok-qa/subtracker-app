@@ -5,7 +5,6 @@ import { resetToken, setToken } from "../../store/slices/app";
 import { removeToken, saveToken } from "../../localStorage";
 
 const apiUrl = import.meta.env.VITE_API_URL;
-console.log("api Url: ", apiUrl);
 
 export const axiosInstance = axios.create({
   baseURL: `${apiUrl}/api/`,
