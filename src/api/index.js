@@ -10,14 +10,6 @@ export const api = {
   ...termsRequest(),
   ...categoriesRequest(),
   getBaseURL: () => axiosInstance.defaults.baseURL,
-  setAuthHeader: (token) =>
-    (axiosInstance.defaults.headers.common[
-      "Authorization"
-    ] = `Bearer ${token}`),
-  getAuthHeader: () => axiosInstance.defaults.headers.common["Authorization"],
-  clearAuthHeader: () => {
-    delete axiosInstance.defaults.headers.common["Authorization"];
-  },
 };
 
 //auth
