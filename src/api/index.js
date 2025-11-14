@@ -43,6 +43,10 @@ export const logout = async () => {
   }
 };
 
+export const forgotPassword = (email) => api.forgotPasswordRequest({ email });
+
+export const changePassword = (data) => api.resetPasswordRequest(data);
+
 //get subscriptions
 export const getSubscriptions = async (params = {}) => {
   try {

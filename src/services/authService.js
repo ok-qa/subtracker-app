@@ -20,7 +20,6 @@ export const signIn = async (values, dispatch) => {
 export const signUp = async (values, dispatch) => {
   const response = await signUpRequest(values);
   const { accessToken } = response;
-  console.log("response: ", response);
   saveToken(accessToken);
   api.setAuthHeader(accessToken);
 

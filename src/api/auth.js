@@ -23,5 +23,19 @@ export const authRequests = () => {
         method: "POST",
         url: `${authPrefix}/logout`,
       }),
+
+    forgotPasswordRequest: (data) =>
+      axiosInstance.request({
+        method: "POST",
+        url: `${authPrefix}/request-reset-email`,
+        data,
+      }),
+
+    resetPasswordRequest: (data) =>
+      axiosInstance.request({
+        method: "POST",
+        url: `${authPrefix}/reset-password`,
+        data,
+      }),
   };
 };
