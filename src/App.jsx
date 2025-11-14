@@ -1,7 +1,5 @@
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { api } from "../src/api";
 import HomePage from "./pages/HomePage/HomePage";
 import AddSubscriptionPage from "./pages/AddSubscriptionPage/AddSubscriptionPage";
 import EditSubscriptionPage from "./pages/EditSubscriptionPage/EditSubscriptionPage";
@@ -16,17 +14,14 @@ import styles from "./App.module.css";
 const authRoutes = ["/reset-password", "/forgot-password", "/register"];
 
 function App() {
-  const { token } = useSelector((state) => state.app);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (token) {
-      api.setAuthHeader(token);
-    } else if (!authRoutes.includes(location.pathname)) {
+    if (!authRoutes.includes(location.pathname)) {
       navigate("/signin");
     }
-  }, [token, navigate]);
+  }, [navigate]);
 
   return (
     <div className={styles.app}>

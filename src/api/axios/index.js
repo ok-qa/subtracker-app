@@ -1,5 +1,4 @@
 import axios from "axios";
-import { api } from "..";
 import { store } from "../../store";
 import { resetToken, setToken } from "../../store/slices/app";
 import { removeToken, saveToken } from "../../localStorage";
@@ -11,6 +10,20 @@ export const axiosInstance = axios.create({
   timeout: 1000 * 20,
   withCredentials: true,
 });
+
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const state = store.getState();
+    const token = state.app.token;
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 let isRefreshing = false;
 let failedQueue = [];
@@ -49,7 +62,6 @@ axiosInstance.interceptors.response.use(
           data: { data },
         } = await axiosInstance.post("/auth/refresh");
         const newAccessToken = data.accessToken;
-        api.setAuthHeader(newAccessToken);
         saveToken(newAccessToken);
         store.dispatch(setToken(newAccessToken));
         axiosInstance.defaults.headers.common["Authorization"] =
