@@ -10,18 +10,26 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 
 import styles from "./App.module.css";
+import { useSelector } from "react-redux";
 
-const authRoutes = ["/reset-password", "/forgot-password", "/register"];
+const authRoutes = [
+  "/reset-password",
+  "/forgot-password",
+  "/register",
+  "/signin",
+];
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { token } = useSelector((state) => state.app);
+
   useEffect(() => {
-    if (!authRoutes.includes(location.pathname)) {
+    if (!token && !authRoutes.includes(location.pathname)) {
       navigate("/signin");
     }
-  }, [navigate]);
+  }, [token, location.pathname, navigate]);
 
   return (
     <div className={styles.app}>
