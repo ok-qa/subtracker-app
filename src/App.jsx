@@ -1,5 +1,6 @@
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import HomePage from "./pages/HomePage/HomePage";
 import AddSubscriptionPage from "./pages/AddSubscriptionPage/AddSubscriptionPage";
 import EditSubscriptionPage from "./pages/EditSubscriptionPage/EditSubscriptionPage";
@@ -8,20 +9,28 @@ import SignInPage from "./pages/SignInPage/SignInPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
+import ProfilePage from "./pages/UserProfilePage/ProfilePage";
 
 import styles from "./App.module.css";
 
-const authRoutes = ["/reset-password", "/forgot-password", "/register"];
+const authRoutes = [
+  "/reset-password",
+  "/forgot-password",
+  "/register",
+  "/signin",
+];
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { token } = useSelector((state) => state.app);
+
   useEffect(() => {
-    if (!authRoutes.includes(location.pathname)) {
+    if (!token && !authRoutes.includes(location.pathname)) {
       navigate("/signin");
     }
-  }, [navigate]);
+  }, [token, location.pathname, navigate]);
 
   return (
     <div className={styles.app}>
@@ -34,6 +43,7 @@ function App() {
         <Route path="/register" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </div>
   );

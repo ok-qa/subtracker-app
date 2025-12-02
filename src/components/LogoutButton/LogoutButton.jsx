@@ -3,7 +3,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { logout } from "../../services/authService";
 import { useDispatch } from "react-redux";
 
-export default function LogoutButton() {
+const LogoutButton = () => {
   const dispatch = useDispatch();
 
   const handleLogout = async () => {
@@ -30,4 +30,6 @@ export default function LogoutButton() {
       Logout
     </Button>
   );
-}
+};
+
+export default LogoutButton;

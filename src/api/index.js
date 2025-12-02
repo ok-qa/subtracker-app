@@ -3,12 +3,14 @@ import { categoriesRequest } from "./categories";
 import { termsRequest } from "./terms";
 import { subscriptionsRequests } from "./subscriptions";
 import { authRequests } from "./auth";
+import { userRequests } from "./user";
 
 export const api = {
   ...authRequests(),
   ...subscriptionsRequests(),
   ...termsRequest(),
   ...categoriesRequest(),
+  ...userRequests(),
   getBaseURL: () => axiosInstance.defaults.baseURL,
 };
 
@@ -38,6 +40,12 @@ export const logout = async () => {
 export const forgotPassword = (email) => api.forgotPasswordRequest({ email });
 
 export const changePassword = (data) => api.resetPasswordRequest(data);
+
+export const uploadAvatar = (data) => api.uploadAvatarRequest(data);
+
+export const getMyProfile = () => api.getUserProfileRequest();
+
+export const updateProfile = (data) => api.updateProfileRequest(data);
 
 //get subscriptions
 export const getSubscriptions = async (params = {}) => {
