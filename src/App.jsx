@@ -12,6 +12,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import ProfilePage from "./pages/UserProfilePage/ProfilePage";
 
 import styles from "./App.module.css";
+import { useSelector } from "react-redux";
 
 const authRoutes = [
   "/reset-password",
