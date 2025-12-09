@@ -29,8 +29,9 @@ const UserProfile = () => {
     const fetchProfile = async () => {
       try {
         const response = await getMyProfile();
-        dispatch(setUser(response.data.data));
-        setName(response.data.data.name || "");
+        const fetchedUser = response.data.data;
+        dispatch(setUser(fetchedUser));
+        setName(fetchedUser.name || "");
       } catch (error) {
         setError(error?.response?.data?.message || "Failed to load profile");
       }
@@ -40,7 +41,9 @@ const UserProfile = () => {
 
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
-  const handleUpload = async (evt) => {
+  const hasChanges = name !== (user?.name || "") || avatarFile !== null;
+
+  const handleUpload = (evt) => {
     const file = evt.target.files[0];
     if (!file) return;
 
@@ -65,15 +68,25 @@ const UserProfile = () => {
   const handleSave = async () => {
     try {
       setIsSaving(true);
-      if (!preview) {
-        const { data } = await updateProfile({ name });
-        dispatch(setUser({ ...user, name: data.name }));
-      } else {
-        const { data } = await updateProfile({ name, avatar: avatarFile });
-        dispatch(setUser({ ...user, name: data.name, avatar: data.avatar }));
-      }
+
+      const formData = new FormData();
+      formData.append("name", name);
+      if (avatarFile) formData.append("avatar", avatarFile);
+
+      const response = await updateProfile(formData);
+      const updatedUser = response.data.data;
+
+      dispatch(
+        setUser({
+          ...updatedUser,
+        })
+      );
+
+      setAvatarFile(null);
+      setPreview(null);
     } catch (err) {
       console.error(err);
+      setUploadError("Failed to save changes. Try again.");
     } finally {
       setIsSaving(false);
     }
@@ -135,7 +148,7 @@ const UserProfile = () => {
           variant="contained"
           sx={{ mt: 2 }}
           onClick={handleSave}
-          disabled={isSaving || !name || uploadError}
+          disabled={isSaving || !name || uploadError || !hasChanges}
         >
           {isSaving ? "Saving..." : "Save Changes"}
         </Button>
