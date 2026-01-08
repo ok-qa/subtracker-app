@@ -15,6 +15,9 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { signIn } from "../../services/authService";
+import { GoogleAuthBtn } from "../../components/GoogleAuthBtn/GoogleAuthBtn";
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const SignInFormSchema = Yup.object().shape({
   email: Yup.string()
@@ -56,6 +59,13 @@ const SignInPage = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    const originState = btoa(JSON.stringify({
+  frontend: window.location.origin,
+}));
+    window.location.href = `${apiUrl}/api/auth/get-oauth-url?state=${originState}`;
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <Paper
@@ -92,7 +102,6 @@ const SignInPage = () => {
                 error={touched.email && Boolean(errors.email)}
                 helperText={touched.email && errors.email}
               />
-
               <Field
                 as={TextField}
                 name="password"
@@ -103,7 +112,6 @@ const SignInPage = () => {
                 error={touched.password && Boolean(errors.password)}
                 helperText={touched.password && errors.password}
               />
-
               <Button
                 type="submit"
                 fullWidth
@@ -114,7 +122,8 @@ const SignInPage = () => {
               >
                 Sign In
               </Button>
-
+              <p>or</p>
+              <GoogleAuthBtn onClick={handleGoogleLogin} />
               <Grid container>
                 <Grid size={{ xs: 12 }}>
                   <Link
