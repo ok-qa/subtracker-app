@@ -47,6 +47,22 @@ export const getMyProfile = () => api.getUserProfileRequest();
 
 export const updateProfile = (data) => api.updateProfileRequest(data);
 
+export const getGoogleOAuthURL = async () => {
+  const {
+    data: { data },
+  } = await api.getGoogleOAuthURLRequest();
+
+  return data.url;
+};
+
+export const getOAuthToken = async () => {
+  const {
+    data: { accessToken },
+  } = await api.getOAuthTokenRequest();
+
+  return accessToken;
+};
+
 //get subscriptions
 export const getSubscriptions = async (params = {}) => {
   try {
