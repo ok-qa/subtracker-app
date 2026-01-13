@@ -38,12 +38,6 @@ export const authRequests = () => {
         data,
       }),
 
-    getGoogleOAuthURLRequest: () =>
-      axiosInstance.request({
-        method: "GET",
-        url: `${authPrefix}/get-oauth-url`,
-      }),
-
     getOAuthTokenRequest: () =>
       axiosInstance.request({
         method: "POST",
