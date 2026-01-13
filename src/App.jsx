@@ -12,12 +12,14 @@ import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import ProfilePage from "./pages/UserProfilePage/ProfilePage";
 
 import styles from "./App.module.css";
+import { OAuthCallback } from "./components/OAuthCallback/OAuthCallback";
 
 const authRoutes = [
   "/reset-password",
   "/forgot-password",
   "/register",
   "/signin",
+  "/oauth/success",
 ];
 
 function App() {
@@ -44,6 +46,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/oauth/success" element={<OAuthCallback />} />
       </Routes>
     </div>
   );

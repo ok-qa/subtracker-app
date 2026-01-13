@@ -47,6 +47,14 @@ export const getMyProfile = () => api.getUserProfileRequest();
 
 export const updateProfile = (data) => api.updateProfileRequest(data);
 
+export const getOAuthToken = async () => {
+  const {
+    data: { accessToken },
+  } = await api.getOAuthTokenRequest();
+
+  return accessToken;
+};
+
 //get subscriptions
 export const getSubscriptions = async (params = {}) => {
   try {

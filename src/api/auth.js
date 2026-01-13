@@ -37,5 +37,11 @@ export const authRequests = () => {
         url: `${authPrefix}/reset-password`,
         data,
       }),
+
+    getOAuthTokenRequest: () =>
+      axiosInstance.request({
+        method: "POST",
+        url: `${authPrefix}/oauth/access-token`,
+      }),
   };
 };
