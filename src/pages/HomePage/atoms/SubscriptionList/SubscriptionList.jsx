@@ -10,7 +10,6 @@ import {
 import Pagination from "@mui/material/Pagination";
 import { useNavigate } from "react-router-dom";
 import { useSubscriptions } from "../../../../context/SubscriptionContext";
-import { format } from "date-fns";
 
 const SubscriptionList = () => {
   const { subscriptions, deleteSubscription, totalPages, page, setPage } =
@@ -30,6 +29,10 @@ const SubscriptionList = () => {
     <>
       <Grid container spacing={2} sx={{ mt: 2, px: 2 }}>
         {subscriptions.map((subscription) => {
+          const endDate = new Date(subscription.endDate)
+            .toISOString()
+            .split("T")[0];
+
           return (
             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={subscription._id}>
               <Card
@@ -55,9 +58,7 @@ const SubscriptionList = () => {
                   <Typography variant="body2">
                     Term: {subscription.term?.name}
                   </Typography>
-                  <Typography variant="body2">
-                    Ends: {format(new Date(subscription.endDate), "MM/dd/yyyy")}
-                  </Typography>
+                  <Typography variant="body2">Ends: {endDate}</Typography>
                 </CardContent>
                 <CardActions>
                   <Button
