@@ -7,9 +7,15 @@ import {
   Paper,
   TextField,
   Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
-import { getMyProfile, updateProfile } from "../../api";
-import { setUser } from "../../store/slices/app";
+import { getMyProfile, updateProfile, deleteProfile } from "../../api";
+import { resetToken, setUser } from "../../store/slices/app";
+import { removeToken } from "../../localStorage";
 
 const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
 
@@ -24,6 +30,8 @@ const UserProfile = () => {
   const [name, setName] = useState("");
   const [avatarFile, setAvatarFile] = useState(null);
   const [uploadError, setUploadError] = useState("");
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -79,7 +87,7 @@ const UserProfile = () => {
       dispatch(
         setUser({
           ...updatedUser,
-        })
+        }),
       );
 
       setAvatarFile(null);
@@ -89,6 +97,29 @@ const UserProfile = () => {
       setUploadError("Failed to save changes. Try again.");
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleDelete = () => {
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCancelDelete = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      setIsDeleting(true);
+      await deleteProfile();
+      removeToken();
+      dispatch(resetToken());
+      dispatch(setUser(null));
+    } catch (err) {
+      console.error(err);
+      setUploadError("Failed to delete profile. Try again.");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -115,12 +146,6 @@ const UserProfile = () => {
             {uploadError}
           </Typography>
         )}
-        {/* <Typography
-  variant="body2"
-  sx={{ mt: 1, color: "text.secondary", fontSize: "0.85rem" }}
->
-  Maximum avatar size: 3MB
-</Typography> */}
 
         <Button variant="contained" component="label" sx={{ mt: 3 }}>
           Upload Avatar
@@ -152,7 +177,36 @@ const UserProfile = () => {
         >
           {isSaving ? "Saving..." : "Save Changes"}
         </Button>
+
+        <Button
+          fullWidth
+          variant="contained"
+          sx={{ mt: 7, backgroundColor: "#FF9595", fontWeight: "bold" }}
+          onClick={handleDelete}
+        >
+          Delete account
+        </Button>
       </Paper>
+
+      <Dialog open={openDeleteDialog} onClose={handleCancelDelete}>
+        <DialogTitle>Warning</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            By submitting <strong>Proceed</strong> button your account will be
+            permanently removed.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDelete}>Cancel</Button>
+          <Button
+            onClick={handleConfirmDelete}
+            color="error"
+            disabled={isDeleting}
+          >
+            {isDeleting ? "Deleting..." : "Proceed"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

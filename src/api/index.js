@@ -47,6 +47,8 @@ export const getMyProfile = () => api.getUserProfileRequest();
 
 export const updateProfile = (data) => api.updateProfileRequest(data);
 
+export const deleteProfile = () => api.deleteProfileRequest();
+
 export const getOAuthToken = async () => {
   const {
     data: { accessToken },
