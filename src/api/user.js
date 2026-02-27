@@ -12,5 +12,11 @@ export const userRequests = () => {
         data,
         headers: { "Content-Type": "multipart/form-data" },
       }),
+
+    deleteProfileRequest: () =>
+      axiosInstance.request({
+        method: "DELETE",
+        url: "/user",
+      }),
   };
 };
