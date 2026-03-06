@@ -47,7 +47,7 @@ const UserProfile = () => {
     fetchProfile();
   }, [dispatch]);
 
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (error) return <p style={{ color: "red" }}> {error} </p>;
 
   const hasChanges = name !== (user?.name || "") || avatarFile !== null;
 
