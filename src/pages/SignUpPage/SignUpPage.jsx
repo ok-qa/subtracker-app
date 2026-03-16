@@ -13,7 +13,7 @@ import {
   Paper,
 } from "@mui/material";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
-import { signUp } from "../../services/authService";
+import { signIn, signUp } from "../../services/authService";
 
 const SignUpFormSchema = Yup.object().shape({
   name: Yup.string()
@@ -54,6 +54,10 @@ const SignUpPage = () => {
       const valuesCopy = { ...values };
       delete valuesCopy.confirmPassword;
       await signUp(valuesCopy, dispatch);
+      await signIn(
+        { email: values.email, password: values.password },
+        dispatch,
+      );
       navigate("/");
     } catch (error) {
       const errorMessage = error.response.data.message;
