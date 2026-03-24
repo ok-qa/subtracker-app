@@ -2,11 +2,41 @@ import { axiosInstance } from "./axios";
 
 export const subscriptionsRequests = () => {
   return {
-    getSubscriptionsRequest: async ({ page, perPage }) =>
-      axiosInstance.request({
+    getSubscriptionsRequest: async ({
+      page,
+      perPage,
+      sortBy,
+      sortOrder,
+      categoryFilters,
+      search,
+      termFilter,
+      minPriceFilter,
+      maxPriceFilter,
+    }) => {
+      let url = `subscriptions?page=${page}&perPage=${perPage}`;
+      if (sortBy && sortOrder) {
+        url = url + `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+      }
+      if (categoryFilters.length) {
+        url = url + `&categoryIds=${categoryFilters}`;
+      }
+      if (search) {
+        url = url + `&name=${search}`;
+      }
+      if (termFilter) {
+        url = url + `&term=${termFilter}`;
+      }
+      if (minPriceFilter) {
+        url = url + `&minPrice=${minPriceFilter}`;
+      }
+      if (maxPriceFilter) {
+        url = url + `&maxPrice=${maxPriceFilter}`;
+      }
+      return axiosInstance.request({
         method: "GET",
-        url: `subscriptions?page=${page}&perPage=${perPage}`,
-      }),
+        url,
+      });
+    },
     createSubscriptionRequest: (subscription) =>
       axiosInstance.request({
         method: "POST",

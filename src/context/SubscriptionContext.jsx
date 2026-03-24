@@ -4,6 +4,8 @@ import {
   editSubscription,
   addSubscription,
   deleteSubscription,
+  getCategories,
+  getTerms,
 } from "../api/index";
 import { useSelector } from "react-redux";
 
@@ -12,17 +14,32 @@ const perPage = 10;
 
 export const SubscriptionProvider = ({ children }) => {
   const [subscriptions, setSubscriptions] = useState([]);
-  const [sortOption, setSortOption] = useState("name-desc");
+  const [sortOption, setSortOption] = useState("default");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [categoryFilters, setCategoryFilters] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [terms, setTerms] = useState([]);
+  const [termFilter, setTermFilter] = useState();
+  const [search, setSearch] = useState("");
+  const [minPrice, setMinPrice] = useState();
+  const [maxPrice, setMaxPrice] = useState();
   const { token } = useSelector((state) => state.app);
 
   const fetchSubscriptions = async () => {
     try {
       const {
         data: { data, totalPages },
-      } = await getSubscriptions({ page, perPage });
+      } = await getSubscriptions({
+        page,
+        perPage,
+        sortOption,
+        categoryFilters,
+        termFilter,
+        search,
+        minPrice,
+        maxPrice,
+      });
       setSubscriptions(data);
       setTotalPages(totalPages);
     } catch (error) {
@@ -30,11 +47,49 @@ export const SubscriptionProvider = ({ children }) => {
     }
   };
 
+  const fetchCategoriesAndTerms = async () => {
+    try {
+      const [categories, terms] = await Promise.all([
+        getCategories(),
+        getTerms(),
+      ]);
+
+      setCategories(categories);
+      setTerms(terms);
+    } catch (err) {
+      console.error("Failed to load categories/terms", err);
+    }
+  };
+
+  const handleSearch = (value) => {
+    setSearch(value);
+  };
+
+  const handleSlider = (priceRangeValues) => {
+    setMinPrice(priceRangeValues[0]);
+    setMaxPrice(priceRangeValues[1]);
+  };
+
   useEffect(() => {
     if (token) {
       fetchSubscriptions();
     }
-  }, [page, token]);
+  }, [
+    page,
+    sortOption,
+    token,
+    categoryFilters,
+    termFilter,
+    search,
+    minPrice,
+    maxPrice,
+  ]);
+
+  useEffect(() => {
+    if (token) {
+      fetchCategoriesAndTerms();
+    }
+  }, [token]);
 
   // CRUD operations
   // add
@@ -62,8 +117,8 @@ export const SubscriptionProvider = ({ children }) => {
 
       setSubscriptions((prev) =>
         prev.map((subscription) =>
-          subscription._id === saved._id ? saved : subscription
-        )
+          subscription._id === saved._id ? saved : subscription,
+        ),
       );
     } catch (error) {
       console.error("Failed to edit subscription:", error);
@@ -76,29 +131,6 @@ export const SubscriptionProvider = ({ children }) => {
     await fetchSubscriptions();
   };
 
-  const filteredSubs = subscriptions.filter((sub) =>
-    categoryFilters.length ? categoryFilters.includes(sub.category) : true
-  );
-
-  const sortedSubscriptions = filteredSubs.slice().sort((a, b) => {
-    switch (sortOption) {
-      case "name-asc":
-        return a.name.localeCompare(b.name);
-      case "name-desc":
-        return b.name.localeCompare(a.name);
-      case "price-asc":
-        return a.price - b.price;
-      case "price-desc":
-        return b.price - a.price;
-      case "term":
-        return a.term.localeCompare(b.term);
-      case "end-date":
-        return new Date(a.endDate) - new Date(b.endDate);
-      default:
-        return 0;
-    }
-  });
-
   const totalCostMonthly = subscriptions.reduce((sum, sub) => {
     const price = Number(sub.price) || 0;
     const monthly = sub.term.name === "year" ? price / 12 : price;
@@ -108,7 +140,7 @@ export const SubscriptionProvider = ({ children }) => {
   return (
     <SubscriptionContext.Provider
       value={{
-        subscriptions: sortedSubscriptions,
+        subscriptions,
         addSubscription: handleAddSubscription,
         editSubscription: handleEditSubscription,
         deleteSubscription: handleDeleteSubscription,
@@ -116,10 +148,16 @@ export const SubscriptionProvider = ({ children }) => {
         sortOption,
         categoryFilters,
         setCategoryFilters,
+        termFilter,
+        setTermFilter,
         totalCostMonthly,
         page,
         setPage,
         totalPages,
+        categories,
+        terms,
+        handleSearch,
+        handleSlider,
       }}
     >
       {children}
