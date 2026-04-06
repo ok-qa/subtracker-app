@@ -1,3 +1,4 @@
+import { sortOptions } from "../../../../constants";
 import { useSubscriptions } from "../../../../context/SubscriptionContext";
 import styles from "./SortSubscriptionSelect.module.css";
 
@@ -14,13 +15,9 @@ const SortSubscriptionSelect = () => {
           setSortOption(e.target.value);
         }}
       >
-        {/* <option value="">-- Select --</option> */}
-        <option value="name-asc">Name A → Z</option>
-        <option value="name-desc">Name Z → A</option>
-        <option value="price-asc">Price Low → High</option>
-        <option value="price-desc">Price High → Low</option>
-        <option value="term">Term (Trial/Month/Year)</option>
-        <option value="end-date">End Date (Soonest)</option>
+        {sortOptions.map((sortOption) => (
+          <option value={sortOption.value}>{sortOption.name}</option>
+        ))}
       </select>
     </div>
   );

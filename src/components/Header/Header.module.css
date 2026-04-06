@@ -17,13 +17,26 @@
 }
 .title {
   font: bold;
-  margin-left: 30px;
   color: black;
-  /* margin-right: 30px; */
 }
 
 .actions {
   display: flex;
+  flex: 1;
   align-items: center;
+  justify-content: flex-end;
   gap: 12px; /* space between Add button and Logout */
+}
+
+.leftContainer {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+.titleContainer {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
 }

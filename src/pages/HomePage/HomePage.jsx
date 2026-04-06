@@ -1,16 +1,36 @@
-import AddSubscriptionBtn from "../../components/AddSubscriptionBtn/AddSubscriptionBtn";
+import { useState } from "react";
+import { Box } from "@mui/material";
+
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import SubscriptionSection from "../HomePage/atoms/SubscriptionsSection/SubscriptionSection";
-//import CategoryFilter from "./atoms/SubscriptionFilter/SubscriptionFilter";
+import FilterSidebar from "../HomePage/atoms/FilterSidebar/FilterSidebar";
 
 const HomePage = () => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <>
-      <Header />
-      <SubscriptionSection />
-      <Footer />
-    </>
+    <Box sx={{ display: "flex", flex: 1, width: "100%" }}>
+      <FilterSidebar open={open} setOpen={setOpen} />
+
+      <Box sx={{ flex: 1 }}>
+        <Header open={open} setOpen={setOpen} />
+
+        <Box
+          component="main"
+          sx={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+          }}
+        >
+          <SubscriptionSection />
+        </Box>
+
+        <Footer />
+      </Box>
+    </Box>
   );
 };
 
