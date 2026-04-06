@@ -1,38 +1,44 @@
 import { Slider, Box, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useSubscriptions } from "../../../../context/SubscriptionContext";
 
-const PriceRangeSlider = ({ handleSlider }) => {
-  const [value, setValue] = useState([0, 1500]);
-  const [debouncedValue, setDebouncedValue] = useState("");
+const PriceRangeSlider = () => {
+  const {
+    sliderValue,
+    setSliderValue,
+    debouncedSliderValue,
+    setDebouncedSliderValue,
+    handleSlider,
+  } = useSubscriptions();
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setSliderValue(newValue);
   };
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setDebouncedValue(value);
+      setDebouncedSliderValue(sliderValue);
     }, 500);
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [value]);
+  }, [sliderValue, setDebouncedSliderValue]);
 
   useEffect(() => {
     if (handleSlider) {
-      handleSlider(debouncedValue);
+      handleSlider(debouncedSliderValue);
     }
-  }, [debouncedValue, handleSlider]);
+  }, [debouncedSliderValue, handleSlider]);
 
   const formatPrice = (val) => `$${val}`;
 
   return (
-    <Box sx={{ width: 300 }}>
+    <Box sx={{ width: "auto" }}>
       <Typography gutterBottom>
-        Price: ${value[0]} - ${value[1]}
+        Price: ${sliderValue[0]} - ${sliderValue[1]}
       </Typography>
       <Slider
-        value={value}
+        value={sliderValue}
         onChange={handleChange}
         valueLabelDisplay="auto"
         valueLabelFormat={formatPrice}
