@@ -21,9 +21,10 @@ export const SubscriptionProvider = ({ children }) => {
   const [categories, setCategories] = useState([]);
   const [terms, setTerms] = useState([]);
   const [termFilter, setTermFilter] = useState();
-  const [search, setSearch] = useState("");
-  const [minPrice, setMinPrice] = useState();
-  const [maxPrice, setMaxPrice] = useState();
+  const [searchValue, setSearchValue] = useState("");
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
+  const [sliderValue, setSliderValue] = useState([0, 1500]);
+  const [debouncedSliderValue, setDebouncedSliderValue] = useState("");
   const { token } = useSelector((state) => state.app);
 
   const fetchSubscriptions = async () => {
@@ -36,9 +37,9 @@ export const SubscriptionProvider = ({ children }) => {
         sortOption,
         categoryFilters,
         termFilter,
-        search,
-        minPrice,
-        maxPrice,
+        search: debouncedSearchValue,
+        minPrice: debouncedSliderValue[0],
+        maxPrice: debouncedSliderValue[1],
       });
       setSubscriptions(data);
       setTotalPages(totalPages);
@@ -62,12 +63,20 @@ export const SubscriptionProvider = ({ children }) => {
   };
 
   const handleSearch = (value) => {
-    setSearch(value);
+    setDebouncedSearchValue(value);
   };
 
   const handleSlider = (priceRangeValues) => {
-    setMinPrice(priceRangeValues[0]);
-    setMaxPrice(priceRangeValues[1]);
+    setDebouncedSliderValue(priceRangeValues);
+  };
+
+  const clearAllFilters = () => {
+    setCategoryFilters([]);
+    setTermFilter();
+    setSliderValue([0, 1500]);
+    setDebouncedSliderValue([0, 1500]);
+    setSearchValue("");
+    setDebouncedSearchValue("");
   };
 
   useEffect(() => {
@@ -80,9 +89,8 @@ export const SubscriptionProvider = ({ children }) => {
     token,
     categoryFilters,
     termFilter,
-    search,
-    minPrice,
-    maxPrice,
+    debouncedSearchValue,
+    debouncedSliderValue,
   ]);
 
   useEffect(() => {
@@ -158,6 +166,15 @@ export const SubscriptionProvider = ({ children }) => {
         terms,
         handleSearch,
         handleSlider,
+        sliderValue,
+        setSliderValue,
+        debouncedSliderValue,
+        setDebouncedSliderValue,
+        searchValue,
+        setSearchValue,
+        debouncedSearchValue,
+        setDebouncedSearchValue,
+        clearAllFilters,
       }}
     >
       {children}

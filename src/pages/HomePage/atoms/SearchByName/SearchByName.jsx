@@ -1,33 +1,39 @@
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useSubscriptions } from "../../../../context/SubscriptionContext";
 
-const SearchByName = ({ onSearch }) => {
-  const [value, setValue] = useState("");
-  const [debouncedValue, setDebouncedValue] = useState("");
+const SearchByName = () => {
+  const {
+    searchValue,
+    setSearchValue,
+    debouncedSearchValue,
+    setDebouncedSearchValue,
+    handleSearch,
+  } = useSubscriptions();
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setDebouncedValue(value);
+      setDebouncedSearchValue(searchValue);
     }, 500);
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [value]);
+  }, [searchValue, setDebouncedSearchValue]);
 
   useEffect(() => {
-    if (onSearch) {
-      onSearch(debouncedValue);
+    if (handleSearch) {
+      handleSearch(debouncedSearchValue);
     }
-  }, [debouncedValue, onSearch]);
+  }, [debouncedSearchValue, handleSearch]);
 
   return (
     <TextField
       fullWidth
       label="Search by Name"
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
+      value={searchValue}
+      onChange={(e) => setSearchValue(e.target.value)}
       sx={{ mt: 3 }}
       //   error={!name}
       InputProps={{
@@ -36,12 +42,12 @@ const SearchByName = ({ onSearch }) => {
             <SearchIcon />
           </InputAdornment>
         ),
-        endAdornment: value && (
+        endAdornment: searchValue && (
           <InputAdornment position="end">
             <IconButton
               onClick={() => {
-                setValue("");
-                onSearch("");
+                setSearchValue("");
+                handleSearch("");
               }}
             >
               <ClearIcon />
