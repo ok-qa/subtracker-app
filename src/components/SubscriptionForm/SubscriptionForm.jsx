@@ -1,6 +1,6 @@
 import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import { getCategories, getTerms } from "../../api";
+import { useSubscriptions } from "../../context/SubscriptionContext";
 
 const initialState = {
   name: "",
@@ -12,8 +12,7 @@ const initialState = {
 
 const SubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
   const [form, setForm] = useState(initialState);
-  const [categories, setCategories] = useState([]);
-  const [terms, setTerms] = useState([]);
+  const { categories, terms } = useSubscriptions();
 
   useEffect(() => {
     if (defaultValues) {
@@ -27,23 +26,6 @@ const SubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
       });
     }
   }, [defaultValues]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [categories, terms] = await Promise.all([
-          getCategories(),
-          getTerms(),
-        ]);
-
-        setCategories(categories);
-        setTerms(terms);
-      } catch (err) {
-        console.error("Failed to load categories/terms", err);
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

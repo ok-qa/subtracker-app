@@ -4,6 +4,7 @@ import { termsRequest } from "./terms";
 import { subscriptionsRequests } from "./subscriptions";
 import { authRequests } from "./auth";
 import { userRequests } from "./user";
+import { getSortParamsByOption } from "../services/subscriptionService";
 
 export const api = {
   ...authRequests(),
@@ -63,6 +64,12 @@ export const getSubscriptions = async (params = {}) => {
     const parsedParams = {
       page: params.page ? params.page : 1,
       perPage: params.perPage ? params.perPage : 10,
+      ...getSortParamsByOption(params.sortOption),
+      categoryFilters: params.categoryFilters,
+      search: params.search,
+      termFilter: params.termFilter,
+      minPriceFilter: params.minPrice,
+      maxPriceFilter: params.maxPrice,
     };
     const { data } = await api.getSubscriptionsRequest(parsedParams);
     return data;

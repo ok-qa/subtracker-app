@@ -7,34 +7,35 @@ import {
   Button,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   Checkbox,
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { categories } from "../../../../constants/categories";
 import { useSubscriptions } from "../../../../context/SubscriptionContext";
 
-// import styles from "./SubscriptionFilter.module.css";
-
-// const drawerWidth = 250;
-
 const CategoryFilter = ({ open, onClose }) => {
-  const { categoryFilters, setCategoryFilters } = useSubscriptions();
+  const { categoryFilters, setCategoryFilters, categories } =
+    useSubscriptions();
 
-  const toggleCategory = (cat) => {
+  const toggleCategory = (filterId) => {
     setCategoryFilters((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
+      prev.includes(filterId)
+        ? prev.filter((id) => id !== filterId)
+        : [...prev, filterId],
     );
   };
 
   const clearAll = () => setCategoryFilters([]);
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
+    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs" autoFocus>
       <DialogTitle>
-        <Typography variant="h5">Filter by Categories</Typography>
+        <Typography variant="h5" component="span">
+          Filter by Categories
+        </Typography>
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -51,20 +52,20 @@ const CategoryFilter = ({ open, onClose }) => {
       <DialogContent dividers>
         <List>
           {categories.map((cat) => (
-            <ListItem
-              key={cat}
-              button
-              onClick={() => toggleCategory(cat)}
-              dense
-            >
-              <ListItemIcon>
-                <Checkbox
-                  edge="start"
-                  checked={categoryFilters.includes(cat)}
-                  disableRipple
-                />
-              </ListItemIcon>
-              <ListItemText primary={cat} />
+            <ListItem disablePadding key={cat.filterId}>
+              <ListItemButton
+                onClick={() => toggleCategory(cat.filterId)}
+                dense
+              >
+                <ListItemIcon>
+                  <Checkbox
+                    edge="start"
+                    checked={categoryFilters.includes(cat.filterId)}
+                    disableRipple
+                  />
+                </ListItemIcon>
+                <ListItemText primary={cat.name} />
+              </ListItemButton>
             </ListItem>
           ))}
         </List>
