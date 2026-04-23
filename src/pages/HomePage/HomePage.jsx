@@ -5,6 +5,7 @@ import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import SubscriptionSection from "../HomePage/atoms/SubscriptionsSection/SubscriptionSection";
 import FilterSidebar from "../HomePage/atoms/FilterSidebar/FilterSidebar";
+import UserChat from "../../components/UserSupportChat/UserSupportChat";
 
 const HomePage = () => {
   const [open, setOpen] = useState(false);
@@ -15,7 +16,6 @@ const HomePage = () => {
 
       <Box sx={{ flex: 1 }}>
         <Header open={open} setOpen={setOpen} />
-
         <Box
           component="main"
           sx={{
@@ -28,6 +28,7 @@ const HomePage = () => {
           <SubscriptionSection />
         </Box>
 
+        <UserChat />
         <Footer />
       </Box>
     </Box>
