@@ -1,21 +1,27 @@
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Link as BrowserLink } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link as BrowserLink } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
 import {
-  Avatar,
-  Button,
+  Box,
   TextField,
   Link,
-  Grid,
   Typography,
   Container,
   Paper,
+  Divider,
+  InputAdornment,
+  IconButton,
+  Alert,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 import { signIn } from "../../services/authService";
 import { GoogleAuthBtn } from "../../components/GoogleAuthBtn/GoogleAuthBtn";
+import AuthBackground from "../../components/AppBackground/AppBackground";
+
+import AuthSubmitBtn from "../../components/AuthSubmitBtn/AuthSubmitBtn";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -36,6 +42,10 @@ const initialValues = {
 const SignInPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const getButtonDisabled = ({ errors, isSubmitting }) => {
     return !!(isSubmitting || errors.email || errors.password);
@@ -60,91 +70,204 @@ const SignInPage = () => {
   };
 
   const handleGoogleLogin = async () => {
-    const originState = btoa(JSON.stringify({
-  frontend: window.location.origin,
-}));
+    const originState = btoa(
+      JSON.stringify({
+        frontend: window.location.origin,
+      }),
+    );
     window.location.href = `${apiUrl}/api/auth/get-oauth-url?state=${originState}`;
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Paper
-        elevation={6}
-        sx={{
-          p: 4,
-          mt: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          borderRadius: 3,
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign In
-        </Typography>
-
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validationSchema={SignInFormSchema}
+    <AuthBackground>
+      <Container maxWidth="xs">
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            mb: 3,
+          }}
         >
-          {({ errors, touched, isSubmitting }) => (
-            <Form>
-              <Field
-                as={TextField}
-                label="Email Address"
-                name="email"
-                fullWidth
-                margin="normal"
-                error={touched.email && Boolean(errors.email)}
-                helperText={touched.email && errors.email}
-              />
-              <Field
-                as={TextField}
-                name="password"
-                label="Password"
-                type="password"
-                fullWidth
-                margin="normal"
-                error={touched.password && Boolean(errors.password)}
-                helperText={touched.password && errors.password}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                disabled={getButtonDisabled({ errors, isSubmitting })}
-                sx={{ mt: 3, mb: 2, py: 1 }}
-              >
-                Sign In
-              </Button>
-              <p>or</p>
-              <GoogleAuthBtn onClick={handleGoogleLogin} />
-              <Grid container>
-                <Grid size={{ xs: 12 }}>
-                  <Link
-                    component={BrowserLink}
-                    to="/forgot-password"
-                    variant="body2"
-                  >
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid size={{ xs: 12 }}>
-                  <Link component={BrowserLink} to="/register" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
-            </Form>
-          )}
-        </Formik>
-      </Paper>
-    </Container>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: 36,
+              height: 36,
+              borderRadius: "10px",
+              backgroundColor: "#4F46E5",
+              fontWeight: 700,
+              color: "#FFFFFF",
+            }}
+          >
+            S
+          </Box>
+          <Typography
+            variant="body1"
+            color="text.primary"
+            sx={{ ml: 2, fontWeight: 700 }}
+          >
+            SubTracker
+          </Typography>
+        </Box>
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
+            borderRadius: 1.5,
+          }}
+        >
+          <Typography variant="h5" fontWeight={600} gutterBottom>
+            Welcome back 👋
+          </Typography>
+
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            Sign in to keep tabs on your subscriptions.
+          </Typography>
+
+          <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+            validationSchema={SignInFormSchema}
+          >
+            {({ errors, touched, isSubmitting }) => {
+              const showAlert = errors.email === "Incorrect email or password";
+              return (
+                <Form>
+                  {showAlert && (
+                    <Alert
+                      icon={
+                        <ErrorOutlineOutlinedIcon
+                          fontSize="inherit"
+                          sx={{ color: "#EF4444" }}
+                        />
+                      }
+                      severity="error"
+                      sx={{
+                        mt: 2,
+                        color: "#EF4444",
+                        border: "1px solid #EF4444",
+                        backgroundColor: "#c73c3c21",
+                      }}
+                    >
+                      Sorry, email and password you provided don't match our
+                      record. Try again or reset your password.
+                    </Alert>
+                  )}
+                  <Field
+                    as={TextField}
+                    label="Email address*"
+                    name="email"
+                    fullWidth
+                    margin="normal"
+                    error={touched.email && Boolean(errors.email)}
+                    helperText={touched.email && !showAlert && errors.email}
+                    sx={{
+                      borderRadius: 1,
+                    }}
+                  />
+
+                  <Field
+                    as={TextField}
+                    name="password"
+                    label="Password*"
+                    type={showPassword ? "text" : "password"}
+                    fullWidth
+                    margin="normal"
+                    error={touched.password && Boolean(errors.password)}
+                    helperText={
+                      touched.password && !showAlert && errors.password
+                    }
+                    slotProps={{
+                      input: {
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label={
+                                showPassword
+                                  ? "hide the password"
+                                  : "display the password"
+                              }
+                              onClick={handleClickShowPassword}
+                              edge="end"
+                              sx={{ "&:focus": { outline: "none" } }}
+                            >
+                              {showPassword ? (
+                                <VisibilityOffOutlined
+                                  sx={{ color: "#64748B", fontSize: 20 }}
+                                />
+                              ) : (
+                                <VisibilityOutlined
+                                  sx={{
+                                    color: "#64748B",
+                                    fontSize: 20,
+                                  }}
+                                />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      },
+                    }}
+                    sx={{
+                      borderRadius: 1,
+                    }}
+                  />
+
+                  <Box textAlign="right" mt={1}>
+                    <Link
+                      component={BrowserLink}
+                      to="/forgot-password"
+                      variant="body2"
+                    >
+                      Forgot password?
+                    </Link>
+                  </Box>
+
+                  <AuthSubmitBtn
+                    disabled={getButtonDisabled({ errors, isSubmitting })}
+                    title={isSubmitting ? "Signing in…" : "Sign in"}
+                  />
+
+                  <Divider sx={{ my: 3 }}>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      fontSize={11}
+                      fontWeight={600}
+                      letterSpacing="0.12em"
+                    >
+                      OR{" "}
+                    </Typography>
+                  </Divider>
+
+                  <GoogleAuthBtn onClick={handleGoogleLogin} mode="signin" />
+                </Form>
+              );
+            }}
+          </Formik>
+        </Paper>
+        <Box>
+          <Typography
+            variant="body2"
+            align="center"
+            color="text.secondary"
+            sx={{ mt: 3 }}
+          >
+            New to SubTracker?{" "}
+            <Link
+              component={BrowserLink}
+              sx={{ color: "#6366F1" }}
+              to="/register"
+            >
+              Create an account
+            </Link>
+          </Typography>
+        </Box>
+      </Container>
+    </AuthBackground>
   );
 };
 

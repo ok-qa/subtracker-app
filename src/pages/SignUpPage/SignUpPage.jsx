@@ -11,9 +11,20 @@ import {
   Typography,
   Container,
   Paper,
+  Box,
+  Divider,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import { signIn, signUp } from "../../services/authService";
+import AuthBackground from "../../components/AppBackground/AppBackground";
+import { GoogleAuthBtn } from "../../components/GoogleAuthBtn/GoogleAuthBtn";
+import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
+import { useState } from "react";
+import AuthSubmitBtn from "../../components/AuthSubmitBtn/AuthSubmitBtn";
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const SignUpFormSchema = Yup.object().shape({
   name: Yup.string()
@@ -45,6 +56,13 @@ const SignUpPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () =>
+    setShowConfirmPassword((show) => !show);
+
   const getButtonDisabled = ({ errors, isSubmitting }) => {
     return !!(isSubmitting || errors.email || errors.password);
   };
@@ -72,96 +90,213 @@ const SignUpPage = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    const originState = btoa(
+      JSON.stringify({
+        frontend: window.location.origin,
+      }),
+    );
+    window.location.href = `${apiUrl}/api/auth/get-oauth-url?state=${originState}`;
+  };
+
   return (
-    <Container component="main" maxWidth="xs">
-      <Paper
-        elevation={6}
+    <AuthBackground>
+      <Container
+        maxWidth="xs"
         sx={{
-          p: 4,
-          mt: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          borderRadius: 3,
+          mb: 8,
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <PersonAddAltIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign Up
-        </Typography>
-
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleSubmit}
-          validationSchema={SignUpFormSchema}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            mb: 3,
+          }}
         >
-          {({ errors, touched, isSubmitting }) => (
-            <Form>
-              <Grid container spacing={2}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: 36,
+              height: 36,
+              borderRadius: "10px",
+              backgroundColor: "#4F46E5",
+              fontWeight: 700,
+              color: "#FFFFFF",
+            }}
+          >
+            S
+          </Box>
+          <Typography
+            variant="body1"
+            color="text.primary"
+            sx={{ ml: 2, fontWeight: 700 }}
+          >
+            SubTracker
+          </Typography>
+        </Box>
+
+        <Paper
+          elevation={3}
+          sx={{
+            p: 4,
+            borderRadius: 1.5,
+          }}
+        >
+          <Typography variant="h5" fontWeight={600} gutterBottom>
+            Create your account
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            Start tracking your subscriptions in under a minute.
+          </Typography>
+
+          <GoogleAuthBtn onClick={handleGoogleLogin} mode="signup" />
+
+          <Divider sx={{ my: 3, width: "100%" }}>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              fontSize={11}
+              fontWeight={600}
+              letterSpacing="0.12em"
+            >
+              OR SIGN UP WITH EMAIL{" "}
+            </Typography>
+          </Divider>
+
+          <Formik
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+            validationSchema={SignUpFormSchema}
+          >
+            {({ errors, touched, isSubmitting }) => (
+              <Form>
                 <Field
                   as={TextField}
                   name="name"
-                  label="Name"
-                  required
+                  label="Name*"
                   fullWidth
+                  margin="normal"
                   error={touched.name && Boolean(errors.name)}
                   helperText={touched.name && errors.name}
                 />
                 <Field
                   as={TextField}
                   name="email"
-                  label="Email Address"
-                  required
+                  label="Email Address*"
                   fullWidth
+                  margin="normal"
                   error={touched.email && Boolean(errors.email)}
                   helperText={touched.email && errors.email}
                 />
                 <Field
                   as={TextField}
                   name="password"
-                  label="Password"
-                  type="password"
-                  required
+                  label="Password*"
+                  type={showPassword ? "text" : "password"}
                   fullWidth
+                  margin="normal"
                   error={touched.password && Boolean(errors.password)}
                   helperText={touched.password && errors.password}
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label={
+                              showPassword
+                                ? "hide the password"
+                                : "display the password"
+                            }
+                            onClick={handleClickShowPassword}
+                            edge="end"
+                            sx={{ "&:focus": { outline: "none" } }}
+                          >
+                            {showPassword ? (
+                              <VisibilityOffOutlined
+                                sx={{ color: "#64748B", fontSize: 20 }}
+                              />
+                            ) : (
+                              <VisibilityOutlined
+                                sx={{ color: "#64748B", fontSize: 20 }}
+                              />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
                 />
                 <Field
                   as={TextField}
                   name="confirmPassword"
-                  label="Confirm Password"
-                  type="password"
-                  required
+                  label="Confirm Password*"
+                  type={showConfirmPassword ? "text" : "password"}
                   fullWidth
+                  margin="normal"
                   error={
                     touched.confirmPassword && Boolean(errors.confirmPassword)
                   }
                   helperText={touched.confirmPassword && errors.confirmPassword}
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label={
+                              showConfirmPassword
+                                ? "hide the password"
+                                : "display the password"
+                            }
+                            onClick={handleClickShowConfirmPassword}
+                            edge="end"
+                            sx={{ "&:focus": { outline: "none" } }}
+                          >
+                            {showConfirmPassword ? (
+                              <VisibilityOffOutlined
+                                sx={{ color: "#64748B", fontSize: 20 }}
+                              />
+                            ) : (
+                              <VisibilityOutlined
+                                sx={{ color: "#64748B", fontSize: 20 }}
+                              />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
                 />
-              </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                disabled={getButtonDisabled({ errors, isSubmitting })}
-                sx={{ mt: 3, mb: 2, py: 1 }}
-              >
-                Sign Up
-              </Button>
-              <Grid container justifyContent="flex-end">
-                <Grid>
-                  <Link component={BrowserLink} to="/signin" variant="body2">
-                    Already have an account? Sign in
-                  </Link>
-                </Grid>
-              </Grid>
-            </Form>
-          )}
-        </Formik>
-      </Paper>
-    </Container>
+                <AuthSubmitBtn
+                  disabled={getButtonDisabled({ errors, isSubmitting })}
+                  title={isSubmitting ? "Creating account…" : "Create account"}
+                />
+              </Form>
+            )}
+          </Formik>
+        </Paper>
+        <Box>
+          <Typography
+            variant="body2"
+            align="center"
+            color="text.secondary"
+            sx={{ mt: 2 }}
+          >
+            Already have an account?{" "}
+            <Link
+              component={BrowserLink}
+              to="/signin"
+              sx={{ color: "#6366F1" }}
+            >
+              Sign in
+            </Link>
+          </Typography>
+        </Box>
+      </Container>
+    </AuthBackground>
   );
 };
 

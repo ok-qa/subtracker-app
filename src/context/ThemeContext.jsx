@@ -1,18 +1,16 @@
 import { createContext, useState, useEffect } from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import { getTheme, setTheme } from "../localStorage";
+import getAppTheme from "../theme/AppTheme";
 
 export const ThemeContextProvider = ({ children }) => {
   const [themeMode, setThemeMode] = useState(() => {
     const currentTheme = getTheme();
+
     return currentTheme;
   });
 
-  const theme = createTheme({
-    palette: {
-      mode: themeMode,
-    },
-  });
+  const theme = getAppTheme(themeMode);
 
   useEffect(() => {
     setTheme(themeMode);
