@@ -18,6 +18,7 @@ import { useState } from "react";
 import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import AuthBackground from "../../components/AppBackground/AppBackground";
+import AuthSubmitBtn from "../../components/AuthSubmitBtn/AuthSubmitBtn";
 
 const ResetPasswordPage = () => {
   const [isExpiredLink, setIsExpiredLink] = useState(false);
@@ -68,8 +69,16 @@ const ResetPasswordPage = () => {
   });
 
   const isDisabled = formik.isSubmitting || formik.status?.success;
+  const resetPasswordBtnDisabled =
+    isDisabled || formik.errors.password || formik.errors.confirm;
 
   if (!token) return <Typography>Invalid or missing reset link.</Typography>;
+
+  const buttonTitle = formik.isSubmitting
+    ? "Resetting..."
+    : formik.status?.success
+      ? "Done"
+      : "Reset Password";
 
   return (
     <AuthBackground>
@@ -132,15 +141,10 @@ const ResetPasswordPage = () => {
                 </AlertTitle>
                 Reset links are valid for 30 minutes and can only be used once.
               </Alert>
-              <Button
+              <AuthSubmitBtn
+                title="Request a new link"
                 onClick={() => navigate("/forgot-password")}
-                fullWidth
-                variant="contained"
-                sx={{ mt: 2 }}
-                disabled={isDisabled}
-              >
-                Request a new link
-              </Button>
+              />
             </>
           ) : (
             <form onSubmit={formik.handleSubmit}>
@@ -240,19 +244,10 @@ const ResetPasswordPage = () => {
                 }}
               />
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 2 }}
-                disabled={isDisabled}
-              >
-                {formik.isSubmitting
-                  ? "Resetting..."
-                  : formik.status?.success
-                    ? "Done"
-                    : "Reset Password"}
-              </Button>
+              <AuthSubmitBtn
+                disabled={resetPasswordBtnDisabled}
+                title={buttonTitle}
+              />
             </form>
           )}
         </Paper>

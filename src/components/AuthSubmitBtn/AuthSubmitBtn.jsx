@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 
-const AuthSubmitBtn = ({ disabled, title }) => {
+const AuthSubmitBtn = ({ disabled, title, onClick }) => {
   return (
     <Button
       type="submit"
@@ -8,6 +8,7 @@ const AuthSubmitBtn = ({ disabled, title }) => {
       variant="contained"
       size="large"
       disabled={disabled}
+      onClick={onClick}
       sx={{
         height: 52,
         mt: 3,
