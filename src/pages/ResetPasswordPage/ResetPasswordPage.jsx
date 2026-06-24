@@ -17,8 +17,9 @@ import { changePassword } from "../../api";
 import { useState } from "react";
 import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
-import AuthBackground from "../../components/AppBackground/AppBackground";
+import AppBackground from "../../components/AppBackground/AppBackground";
 import AuthSubmitBtn from "../../components/AuthSubmitBtn/AuthSubmitBtn";
+import LogoTitleContainer from "../../components/LogoTitleContainer/LogoTitleContainer";
 
 const ResetPasswordPage = () => {
   const [isExpiredLink, setIsExpiredLink] = useState(false);
@@ -81,39 +82,9 @@ const ResetPasswordPage = () => {
       : "Reset Password";
 
   return (
-    <AuthBackground>
+    <AppBackground isAuth childrenWrapperStyles={{ p: { xs: 3, sm: 5 } }}>
       <Container maxWidth="xs">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            mb: 3,
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: 36,
-              height: 36,
-              borderRadius: "10px",
-              backgroundColor: "#4F46E5",
-              fontWeight: 700,
-              color: "#FFFFFF",
-            }}
-          >
-            S
-          </Box>
-          <Typography
-            variant="body1"
-            color="text.primary"
-            sx={{ ml: 2, fontWeight: 700 }}
-          >
-            SubTracker
-          </Typography>
-        </Box>
+        <LogoTitleContainer />
 
         <Paper sx={{ p: 4, width: 350 }}>
           <Typography variant="h5" fontWeight={600} gutterBottom>
@@ -252,7 +223,7 @@ const ResetPasswordPage = () => {
           )}
         </Paper>
       </Container>
-    </AuthBackground>
+    </AppBackground>
   );
 };
 

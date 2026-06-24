@@ -15,8 +15,9 @@ import { forgotPassword } from "../../api";
 import { CheckCircleRounded } from "@mui/icons-material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import AuthBackground from "../../components/AppBackground/AppBackground";
+import AppBackground from "../../components/AppBackground/AppBackground";
 import AuthSubmitBtn from "../../components/AuthSubmitBtn/AuthSubmitBtn";
+import LogoTitleContainer from "../../components/LogoTitleContainer/LogoTitleContainer";
 
 const ForgotPasswordPage = () => {
   const [success, setSuccess] = useState(false);
@@ -50,39 +51,9 @@ const ForgotPasswordPage = () => {
   });
 
   return (
-    <AuthBackground>
+    <AppBackground isAuth childrenWrapperStyles={{ p: { xs: 3, sm: 5 } }}>
       <Container maxWidth="xs">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            mb: 3,
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: 36,
-              height: 36,
-              borderRadius: "10px",
-              backgroundColor: "#4F46E5",
-              fontWeight: 700,
-              color: "#FFFFFF",
-            }}
-          >
-            S
-          </Box>
-          <Typography
-            variant="body1"
-            color="text.primary"
-            sx={{ ml: 2, fontWeight: 700 }}
-          >
-            SubTracker
-          </Typography>
-        </Box>
+        <LogoTitleContainer />
         <Paper elevation={3} sx={{ p: 4, width: 350 }}>
           <Typography variant="h5" mb={2}>
             Forgot your password?
@@ -154,7 +125,7 @@ const ForgotPasswordPage = () => {
           </Typography>
         </Link>
       </Container>
-    </AuthBackground>
+    </AppBackground>
   );
 };
 

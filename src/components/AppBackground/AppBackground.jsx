@@ -1,6 +1,6 @@
 import { Box, useTheme } from "@mui/material";
 
-function AuthBackground({ children }) {
+function AppBackground({ children, childrenWrapperStyles, isAuth }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
@@ -20,48 +20,53 @@ function AuthBackground({ children }) {
         background: `linear-gradient(180deg, ${bgFrom} 0%, ${bgTo} 100%)`,
       }}
     >
-      {/* Aurora blob 1 — indigo, top-left */}
-      <Box
-        aria-hidden
-        sx={{
-          position: "absolute",
-          top: "-15%",
-          left: "-10%",
-          width: 520,
-          height: 520,
-          borderRadius: "50%",
-          filter: "blur(80px)",
-          backgroundColor: auroraA,
-          pointerEvents: "none",
-        }}
-      />
-      {/* Aurora blob 2 — cyan, bottom-right */}
-      <Box
-        aria-hidden
-        sx={{
-          position: "absolute",
-          bottom: "-20%",
-          right: "-10%",
-          width: 600,
-          height: 600,
-          borderRadius: "50%",
-          filter: "blur(90px)",
-          backgroundColor: auroraB,
-          pointerEvents: "none",
-        }}
-      />
-      {/* Subtle dot grid */}
-      <Box
-        aria-hidden
-        sx={{
-          position: "absolute",
-          inset: 0,
-          opacity: 0.5,
-          pointerEvents: "none",
-          backgroundImage: `radial-gradient(${dotColor} 1px, transparent 1px)`,
-          backgroundSize: "24px 24px",
-        }}
-      />
+      {isAuth && (
+        <>
+          {/* Aurora blob 1 — indigo, top-left */}
+
+          <Box
+            aria-hidden
+            sx={{
+              position: "absolute",
+              top: "-15%",
+              left: "-10%",
+              width: 520,
+              height: 520,
+              borderRadius: "50%",
+              filter: "blur(80px)",
+              backgroundColor: auroraA,
+              pointerEvents: "none",
+            }}
+          />
+          {/* Aurora blob 2 — cyan, bottom-right */}
+          <Box
+            aria-hidden
+            sx={{
+              position: "absolute",
+              bottom: "-20%",
+              right: "-10%",
+              width: 600,
+              height: 600,
+              borderRadius: "50%",
+              filter: "blur(90px)",
+              backgroundColor: auroraB,
+              pointerEvents: "none",
+            }}
+          />
+          {/* Subtle dot grid */}
+          <Box
+            aria-hidden
+            sx={{
+              position: "absolute",
+              inset: 0,
+              opacity: 0.5,
+              pointerEvents: "none",
+              backgroundImage: `radial-gradient(${dotColor} 1px, transparent 1px)`,
+              backgroundSize: "24px 24px",
+            }}
+          />
+        </>
+      )}
 
       {/* Content */}
       <Box
@@ -72,7 +77,7 @@ function AuthBackground({ children }) {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          p: { xs: 3, sm: 5 },
+          ...childrenWrapperStyles,
         }}
       >
         {children}
@@ -81,4 +86,4 @@ function AuthBackground({ children }) {
   );
 }
 
-export default AuthBackground;
+export default AppBackground;

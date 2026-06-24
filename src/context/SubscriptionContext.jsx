@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   getSubscriptions,
   editSubscription,
@@ -15,34 +21,74 @@ const perPage = 10;
 export const SubscriptionProvider = ({ children }) => {
   const [subscriptions, setSubscriptions] = useState([]);
   const [sortOption, setSortOption] = useState("default");
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [categoryFilters, setCategoryFilters] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [terms, setTerms] = useState([]);
-  const [termFilter, setTermFilter] = useState();
-  const [searchValue, setSearchValue] = useState("");
-  const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
-  const [sliderValue, setSliderValue] = useState([0, 1500]);
-  const [debouncedSliderValue, setDebouncedSliderValue] = useState("");
+
+  const [pagination, setPagination] = useState({
+    page: 1,
+    totalPages: 1,
+    totalItems: 0,
+  });
+  const [categories, setCategories] = useState({
+    categoriesData: [],
+    categoryFilters: [],
+  });
+  const [terms, setTerms] = useState({
+    termsData: [],
+    termFilter: undefined,
+  });
+
+  const [searchName, setSearchName] = useState({
+    searchValue: "",
+    debouncedSearchValue: "",
+  });
+
+  const [priceSlider, setPriceSlider] = useState({
+    sliderValue: [0, 1500],
+    debouncedSliderValue: "",
+  });
+
+  const [calculations, setCalculations] = useState({
+    activeSubCount: 0,
+    monthlyCost: 0,
+    subRenewingColor: "",
+    upcomingRenewalNumber: 0,
+  });
+
   const { token } = useSelector((state) => state.app);
 
   const fetchSubscriptions = async () => {
     try {
       const {
-        data: { data, totalPages },
+        data: {
+          data,
+          totalPages,
+          totalItems,
+          activeSubscriptionsCount,
+          totalMonthlyCost,
+          renewalColor,
+          upcomingRenewalCount,
+        },
       } = await getSubscriptions({
-        page,
+        page: pagination.page,
         perPage,
         sortOption,
-        categoryFilters,
-        termFilter,
-        search: debouncedSearchValue,
-        minPrice: debouncedSliderValue[0],
-        maxPrice: debouncedSliderValue[1],
+        categoryFilters: categories.categoryFilters,
+        termFilter: terms.termFilter,
+        search: searchName.debouncedSearchValue,
+        minPrice: priceSlider.debouncedSliderValue[0],
+        maxPrice: priceSlider.debouncedSliderValue[1],
       });
       setSubscriptions(data);
-      setTotalPages(totalPages);
+      setPagination({
+        page: pagination.page,
+        totalPages: totalPages,
+        totalItems: totalItems,
+      });
+      setCalculations({
+        activeSubCount: activeSubscriptionsCount,
+        monthlyCost: totalMonthlyCost,
+        subRenewingColor: renewalColor,
+        upcomingRenewalNumber: upcomingRenewalCount,
+      });
     } catch (error) {
       console.error("Failed to fetch subscriptions: ", error);
     }
@@ -50,33 +96,57 @@ export const SubscriptionProvider = ({ children }) => {
 
   const fetchCategoriesAndTerms = async () => {
     try {
-      const [categories, terms] = await Promise.all([
+      const [categoriesData, termsData] = await Promise.all([
         getCategories(),
         getTerms(),
       ]);
-
-      setCategories(categories);
-      setTerms(terms);
+      setCategories({
+        categoriesData,
+        categoryFilters: categories.categoryFilters,
+      });
+      setTerms({ termsData, termFilter: terms.termFilter });
     } catch (err) {
       console.error("Failed to load categories/terms", err);
     }
   };
 
-  const handleSearch = (value) => {
-    setDebouncedSearchValue(value);
-  };
+  const handleSearch = useCallback(
+    (value) => {
+      setSearchName({
+        searchValue: searchName.searchValue,
+        debouncedSearchValue: value,
+      });
+    },
+    [searchName.searchValue],
+  );
 
-  const handleSlider = (priceRangeValues) => {
-    setDebouncedSliderValue(priceRangeValues);
-  };
+  const handleSlider = useCallback(
+    (priceRangeValues) => {
+      setPriceSlider({
+        sliderValue: priceSlider.sliderValue,
+        debouncedSliderValue: priceRangeValues,
+      });
+    },
+    [priceSlider.sliderValue],
+  );
 
   const clearAllFilters = () => {
-    setCategoryFilters([]);
-    setTermFilter();
-    setSliderValue([0, 1500]);
-    setDebouncedSliderValue([0, 1500]);
-    setSearchValue("");
-    setDebouncedSearchValue("");
+    setCategories({
+      categoriesData: categories.categoriesData,
+      categoryFilters: [],
+    });
+    setTerms({
+      termsData: terms.termsData,
+      termFilter: undefined,
+    });
+    setPriceSlider({
+      sliderValue: [0, 1500],
+      debouncedSliderValue: [0, 1500],
+    });
+    setSearchName({
+      searchValue: "",
+      debouncedSearchValue: "",
+    });
   };
 
   useEffect(() => {
@@ -84,13 +154,13 @@ export const SubscriptionProvider = ({ children }) => {
       fetchSubscriptions();
     }
   }, [
-    page,
+    pagination.page,
     sortOption,
     token,
-    categoryFilters,
-    termFilter,
-    debouncedSearchValue,
-    debouncedSliderValue,
+    categories.categoryFilters,
+    terms.termFilter,
+    searchName.debouncedSearchValue,
+    priceSlider.debouncedSliderValue,
   ]);
 
   useEffect(() => {
@@ -103,17 +173,13 @@ export const SubscriptionProvider = ({ children }) => {
   // add
   const handleAddSubscription = async (data) => {
     try {
-      const newSub = await addSubscription({
-        ...data,
-      });
-
+      const newSub = await addSubscription(data);
       setSubscriptions((prev) => [...prev, newSub]);
     } catch (error) {
       console.error("Failed to add subscription:", error);
     }
   };
 
-  // edit
   const handleEditSubscription = async (updatedSubscription) => {
     try {
       const saved = await editSubscription(updatedSubscription._id, {
@@ -133,17 +199,14 @@ export const SubscriptionProvider = ({ children }) => {
     }
   };
 
-  //delete
   const handleDeleteSubscription = async (id) => {
-    await deleteSubscription(id);
-    await fetchSubscriptions();
+    try {
+      await deleteSubscription(id);
+      await fetchSubscriptions();
+    } catch (error) {
+      console.error("Failed to delete subscription:", error);
+    }
   };
-
-  const totalCostMonthly = subscriptions.reduce((sum, sub) => {
-    const price = Number(sub.price) || 0;
-    const monthly = sub.term.name === "year" ? price / 12 : price;
-    return sum + monthly;
-  }, 0);
 
   return (
     <SubscriptionContext.Provider
@@ -152,28 +215,21 @@ export const SubscriptionProvider = ({ children }) => {
         addSubscription: handleAddSubscription,
         editSubscription: handleEditSubscription,
         deleteSubscription: handleDeleteSubscription,
-        setSortOption,
         sortOption,
-        categoryFilters,
-        setCategoryFilters,
-        termFilter,
-        setTermFilter,
-        totalCostMonthly,
-        page,
-        setPage,
-        totalPages,
+        setSortOption,
+        calculations,
+        pagination,
+        setPagination,
         categories,
+        setCategories,
         terms,
-        handleSearch,
+        setTerms,
+        priceSlider,
+        setPriceSlider,
         handleSlider,
-        sliderValue,
-        setSliderValue,
-        debouncedSliderValue,
-        setDebouncedSliderValue,
-        searchValue,
-        setSearchValue,
-        debouncedSearchValue,
-        setDebouncedSearchValue,
+        handleSearch,
+        searchName,
+        setSearchName,
         clearAllFilters,
       }}
     >

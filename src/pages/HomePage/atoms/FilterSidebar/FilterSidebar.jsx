@@ -20,7 +20,6 @@ const drawerWidth = 280;
 
 const FilterSidebar = ({ open, setOpen }) => {
   const [categoryFilterOpen, setCategoryFilterOpen] = useState(false);
-  const [termFilterOpen, setTermFilterOpen] = useState(false);
   const { handleSearch, clearAllFilters } = useSubscriptions();
 
   return (
@@ -35,10 +34,8 @@ const FilterSidebar = ({ open, setOpen }) => {
         "& .MuiDrawer-paper": {
           width: open ? drawerWidth : 0,
           boxSizing: "border-box",
-          p: open ? 2 : 0,
           overflow: "hidden",
           transition: "width 0.3s ease",
-          padding: "0 24px",
         },
       }}
     >
@@ -47,48 +44,40 @@ const FilterSidebar = ({ open, setOpen }) => {
         justifyContent="space-between"
         alignItems="center"
         paddingTop="16px"
+        sx={{ px: 3 }}
       >
         <Typography variant="h6">Filters</Typography>
-        <IconButton onClick={() => setOpen(false)}>
+        <IconButton
+          sx={{
+            color: "#64748B",
+            "&:focus": {
+              outline: "none",
+            },
+            "&.Mui-focusVisible": {
+              outline: "none",
+            },
+          }}
+          onClick={() => setOpen(false)}
+        >
           <CloseIcon />
         </IconButton>
       </Box>
 
       <Divider sx={{ my: 2 }} />
 
-      <Button
-        variant="contained"
-        sx={{ borderRadius: "20px", mb: 2 }}
-        startIcon={<FilterListIcon />}
-        onClick={() => setCategoryFilterOpen(true)}
-      >
-        Filter by Categories
-      </Button>
+      <Box sx={{ py: 0, px: 3 }}>
+        <SearchByName onSearch={handleSearch} />
 
-      <CategoryFilter
-        open={categoryFilterOpen}
-        onClose={() => setCategoryFilterOpen(false)}
-      />
+        <CategoryFilter
+          open={categoryFilterOpen}
+          onClose={() => setCategoryFilterOpen(false)}
+        />
 
-      <Button
-        variant="contained"
-        sx={{ borderRadius: "20px", mb: 2 }}
-        startIcon={<FilterListIcon />}
-        onClick={() => setTermFilterOpen(true)}
-      >
-        Filter by Terms
-      </Button>
+        <TermFilter />
 
-      <TermFilter
-        open={termFilterOpen}
-        onClose={() => setTermFilterOpen(false)}
-      />
-
-      <SearchByName onSearch={handleSearch} />
-
+        <PriceRangeSlider />
+      </Box>
       <Divider sx={{ my: 2 }} />
-
-      <PriceRangeSlider />
       <Box
         sx={{
           display: "flex",
@@ -96,9 +85,40 @@ const FilterSidebar = ({ open, setOpen }) => {
           justifyContent: "flex-end",
           alignItems: "flex-end",
           mb: 3,
+          px: 3,
         }}
       >
-        <Button variant="outlined" onClick={() => clearAllFilters()}>
+        <Button
+          variant="outlined"
+          onClick={() => clearAllFilters()}
+          sx={(theme) => ({
+            py: 0.5,
+            px: 2,
+            fontWeight: 700,
+            borderRadius: "20px",
+            borderColor: "#64748B",
+
+            color: theme.palette.mode === "dark" ? "#FFFFFF" : "#0F172A",
+
+            backgroundColor:
+              theme.palette.mode === "dark" ? "#0F172A" : "#FFFFFF",
+
+            "&:focus": { outline: "none" },
+            "&.Mui-focusVisible": {
+              outline: "none",
+            },
+
+            "&:hover": {
+              borderColor: "#4F46E5",
+              "&:focus": {
+                outline: "none",
+              },
+
+              backgroundColor:
+                theme.palette.mode === "dark" ? "#1E293B" : "#E2E8F0",
+            },
+          })}
+        >
           Clear All
         </Button>
       </Box>

@@ -12,7 +12,10 @@ const initialState = {
 
 const SubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
   const [form, setForm] = useState(initialState);
-  const { categories, terms } = useSubscriptions();
+  const {
+    categories: { categoriesData },
+    terms: { termsData },
+  } = useSubscriptions();
 
   useEffect(() => {
     if (defaultValues) {
@@ -72,7 +75,7 @@ const SubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
         fullWidth
         required
       >
-        {categories.map((category) => (
+        {categoriesData.map((category) => (
           <MenuItem key={category.name} value={category._id}>
             {category.name}
           </MenuItem>
@@ -99,7 +102,7 @@ const SubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
         fullWidth
         margin="normal"
       >
-        {terms.map((term) => (
+        {termsData.map((term) => (
           <MenuItem key={term.name} value={term._id}>
             {term.name}
           </MenuItem>

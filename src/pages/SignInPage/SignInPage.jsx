@@ -19,9 +19,10 @@ import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 import { signIn } from "../../services/authService";
 import { GoogleAuthBtn } from "../../components/GoogleAuthBtn/GoogleAuthBtn";
-import AuthBackground from "../../components/AppBackground/AppBackground";
+import AppBackground from "../../components/AppBackground/AppBackground";
 
 import AuthSubmitBtn from "../../components/AuthSubmitBtn/AuthSubmitBtn";
+import LogoTitleContainer from "../../components/LogoTitleContainer/LogoTitleContainer";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -79,39 +80,9 @@ const SignInPage = () => {
   };
 
   return (
-    <AuthBackground>
+    <AppBackground isAuth childrenWrapperStyles={{ p: { xs: 3, sm: 5 } }}>
       <Container maxWidth="xs">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            mb: 3,
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: 36,
-              height: 36,
-              borderRadius: "10px",
-              backgroundColor: "#4F46E5",
-              fontWeight: 700,
-              color: "#FFFFFF",
-            }}
-          >
-            S
-          </Box>
-          <Typography
-            variant="body1"
-            color="text.primary"
-            sx={{ ml: 2, fontWeight: 700 }}
-          >
-            SubTracker
-          </Typography>
-        </Box>
+        <LogoTitleContainer />
         <Paper
           elevation={3}
           sx={{
@@ -267,7 +238,7 @@ const SignInPage = () => {
           </Typography>
         </Box>
       </Container>
-    </AuthBackground>
+    </AppBackground>
   );
 };
 

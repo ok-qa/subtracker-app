@@ -1,4 +1,10 @@
-import { IconButton, InputAdornment, TextField } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useEffect } from "react";
@@ -6,21 +12,19 @@ import { useSubscriptions } from "../../../../context/SubscriptionContext";
 
 const SearchByName = () => {
   const {
-    searchValue,
-    setSearchValue,
-    debouncedSearchValue,
-    setDebouncedSearchValue,
+    searchName: { searchValue, debouncedSearchValue },
+    setSearchName,
     handleSearch,
   } = useSubscriptions();
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setDebouncedSearchValue(searchValue);
+      setSearchName({ searchValue, debouncedSearchValue: searchValue });
     }, 500);
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [searchValue, setDebouncedSearchValue]);
+  }, [searchValue, setSearchName]);
 
   useEffect(() => {
     if (handleSearch) {
@@ -29,33 +33,52 @@ const SearchByName = () => {
   }, [debouncedSearchValue, handleSearch]);
 
   return (
-    <TextField
-      fullWidth
-      label="Search by Name"
-      value={searchValue}
-      onChange={(e) => setSearchValue(e.target.value)}
-      sx={{ mt: 3 }}
-      //   error={!name}
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <SearchIcon />
-          </InputAdornment>
-        ),
-        endAdornment: searchValue && (
-          <InputAdornment position="end">
-            <IconButton
-              onClick={() => {
-                setSearchValue("");
-                handleSearch("");
-              }}
-            >
-              <ClearIcon />
-            </IconButton>
-          </InputAdornment>
-        ),
-      }}
-    />
+    <Box>
+      <Typography
+        sx={{
+          color: "#64748B",
+          fontWeight: 700,
+          fontSize: "0.9rem",
+          textTransform: "uppercase",
+        }}
+      >
+        Search by Name
+      </Typography>
+      <TextField
+        fullWidth
+        placeholder="Search..."
+        value={searchValue}
+        onChange={(e) =>
+          setSearchName({
+            searchValue: e.target.value,
+            debouncedSearchValue: searchValue,
+          })
+        }
+        sx={{ mt: 1 }}
+        //   error={!name}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon sx={{ color: "#64748B" }} />
+            </InputAdornment>
+          ),
+          endAdornment: searchValue && (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={() => {
+                  setSearchName({
+                    searchValue: "",
+                    debouncedSearchValue: "",
+                  });
+                }}
+              >
+                <ClearIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
+    </Box>
   );
 };
 

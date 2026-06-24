@@ -2,7 +2,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 0 16px;
+  padding: 16px;
 
   /* align-content: space-around; */
 
@@ -30,7 +30,7 @@
 
 .leftContainer {
   display: flex;
-  flex: 1;
+
   align-items: center;
 }
 
