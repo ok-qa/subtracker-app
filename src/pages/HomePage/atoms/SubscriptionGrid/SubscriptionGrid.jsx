@@ -1,33 +1,65 @@
-import { useNavigate } from "react-router-dom";
 import {
-  List,
-  ListItem,
-  ListItemText,
   Box,
-  Typography,
   Card,
-  Chip,
-  Pagination,
-  Button,
+  CardContent,
+  Typography,
   CardActions,
+  Button,
+  Grid,
+  Divider,
 } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import Chip from "@mui/material/Chip";
+import Pagination from "@mui/material/Pagination";
+import { useNavigate } from "react-router-dom";
 import { useSubscriptions } from "../../../../context/SubscriptionContext";
+import AddSubscriptionBtn from "../../../../components/AddSubscriptionBtn/AddSubscriptionBtn";
 
-const SubscriptionList = () => {
+const SubscriptionGrid = () => {
   const {
     subscriptions,
     deleteSubscription,
     pagination: { page, totalPages, totalItems },
     setPagination,
   } = useSubscriptions();
+
   const navigate = useNavigate();
+
+  if (subscriptions.length === 0) {
+    return (
+      <Box
+        sx={{
+          bgcolor: "#FFFFFF",
+          borderRadius: 1,
+          border: "dashed, 1px",
+          borderColor: "#F5F7FB",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          px: 2,
+          py: 6,
+        }}
+      >
+        <Typography variant="h6" align="center" sx={{ fontWeight: 700 }}>
+          No subscriptions yet
+        </Typography>
+        <Box sx={{ width: "50%", mt: 1, mb: 3 }}>
+          <Typography variant="subtle" align="center">
+            Add your first subscription and we'll keep track of renewals,
+            totals, and upcoming charges for you.
+          </Typography>
+        </Box>
+        <AddSubscriptionBtn />
+      </Box>
+    );
+  }
 
   return (
     <>
-      <List>
+      <Grid container spacing={4} sx={{ mt: 2 }}>
         {subscriptions.map((subscription) => {
           const renewalDate = new Date(subscription.endDate);
           const formattedRenewalDate = renewalDate.toLocaleDateString("en-US", {
@@ -71,81 +103,62 @@ const SubscriptionList = () => {
                     color: "#10B981",
                     bg: "rgba(16, 185, 129, 0.12)",
                   };
+
           return (
-            <ListItem key={subscription._id}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={subscription._id}>
               <Card
                 variant="outlined"
                 sx={{
                   height: "100%",
-                  width: "100%",
                   display: "flex",
-                  pl: 2,
-                  pr: 0.5,
-                  py: 2,
+                  flexDirection: "column",
+                  justifyContent: "space-between",
                 }}
               >
-                <Box flex={5}>
-                  <Typography
-                    variant="subtitle1"
-                    fontWeight={700}
-                    sx={{ lineHeight: 1.5 }}
-                  >
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Typography variant="h6" fontWeight={700} gutterBottom>
                     {subscription.name}
                   </Typography>
-
                   <Chip
                     label={subscription.category?.name}
                     size="small"
                     variant="outlined"
                     sx={(theme) => ({
+                      mb: 2,
                       fontWeight: 600,
                       color: "#64748B",
+
                       backgroundColor:
                         theme.palette.mode === "dark" ? "#0F172A" : "#F5F7FB",
+
                       borderColor: "#64748B",
-                      mt: 0.5,
                     })}
                   />
-                </Box>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    flex: 3,
-                    alignItems: "center",
-                    // mb: 2,
-                  }}
-                >
-                  <Typography variant="subtitle1" fontWeight={700}>
-                    ${subscription.price}
-                  </Typography>
-                  <Typography
-                    variant="body"
-                    fontWeight={600}
-                    color={"text.secondary"}
-                    sx={{ ml: 0.5, lineHeight: 1.75 }}
-                  >
-                    / {subscription.term?.name}
-                  </Typography>
-                </Box>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    flex: 3,
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    // alignItems: "center",
-                    alignItems: "baseline",
-                  }}
-                >
                   <Box
                     sx={{
                       display: "flex",
-                      flexDirection: "row",
+                      alignItems: "flex-end",
+                      mb: 2,
+                    }}
+                  >
+                    <Typography variant="h4" fontWeight={700}>
+                      ${subscription.price}
+                    </Typography>
+                    <Typography
+                      variant="body"
+                      fontWeight={600}
+                      color={"text.secondary"}
+                      sx={{ ml: 0.5, mb: 0.5 }}
+                    >
+                      / {subscription.term?.name}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
                       alignItems: "baseline",
-                      alignContent: "center",
-                      // mt: 1,
+                      mt: 1,
                     }}
                   >
                     <Typography
@@ -153,34 +166,36 @@ const SubscriptionList = () => {
                       color="text.secondary"
                       sx={{ mb: 1 }}
                     >
-                      Renews&nbsp;&nbsp;
+                      Next renewal
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {" " + formattedRenewalDate}
+                    <Typography variant="subtitle1" fontWeight={600}>
+                      {formattedRenewalDate}
                     </Typography>
                   </Box>
-                  <Box>
-                    <Chip
-                      size="small"
-                      icon={<FiberManualRecordIcon />}
-                      label={renewalChip.text}
-                      sx={{
-                        color: renewalChip.color,
-                        backgroundColor: renewalChip.bg,
-                        fontWeight: 600,
-                        "& .MuiChip-icon": {
-                          fontSize: 12,
-                          color: renewalChip.color,
-                        },
-                      }}
-                    />
-                  </Box>
-                </Box>
 
+                  <Chip
+                    size="small"
+                    icon={<FiberManualRecordIcon />}
+                    label={renewalChip.text}
+                    sx={{
+                      mt: 2,
+                      color: renewalChip.color,
+                      backgroundColor: renewalChip.bg,
+                      fontWeight: 600,
+                      "& .MuiChip-icon": {
+                        fontSize: 12,
+                        color: renewalChip.color,
+                      },
+                    }}
+                  />
+                </CardContent>
+                <Divider sx={{ mx: 2, borderBottomWidth: 2 }}></Divider>
                 <CardActions
                   sx={{
                     justifyContent: "flex-start",
-                    flex: 1,
+                    p: 3,
+                    py: 2,
+                    gap: 1,
                   }}
                 >
                   <Button
@@ -193,13 +208,20 @@ const SubscriptionList = () => {
                         outline: "none",
                         boxShadow: "none",
                       },
-                      px: 0.5,
-                      py: 0,
-                      minWidth: 0,
                     })}
                     startIcon={<EditOutlinedIcon />}
                     onClick={() => navigate(`/edit/${subscription._id}`)}
-                  ></Button>
+                  >
+                    <Box
+                      component="span"
+                      sx={{
+                        display: { xs: "none", sm: "inline" },
+                        fontWeight: 700,
+                      }}
+                    >
+                      Edit
+                    </Box>
+                  </Button>
                   <Button
                     size="medium"
                     sx={(theme) => ({
@@ -210,19 +232,27 @@ const SubscriptionList = () => {
                         outline: "none",
                         boxShadow: "none",
                       },
-                      px: 0.5,
-                      py: 0,
-                      minWidth: 0,
                     })}
+                    // color="error"
                     startIcon={<DeleteOutlineIcon />}
                     onClick={() => deleteSubscription(subscription._id)}
-                  ></Button>
+                  >
+                    <Box
+                      component="span"
+                      sx={{
+                        display: { xs: "none", sm: "inline" },
+                        fontWeight: 700,
+                      }}
+                    >
+                      Delete
+                    </Box>
+                  </Button>
                 </CardActions>
               </Card>
-            </ListItem>
+            </Grid>
           );
         })}
-      </List>
+      </Grid>
       <Box display="flex" justifyContent="center" mt={3}>
         <Pagination
           count={totalPages}
@@ -237,4 +267,4 @@ const SubscriptionList = () => {
   );
 };
 
-export default SubscriptionList;
+export default SubscriptionGrid;

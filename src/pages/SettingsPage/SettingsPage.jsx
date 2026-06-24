@@ -25,9 +25,8 @@ const SettingsPage = () => {
   const { themeMode, setThemeMode } = useContext(ThemeContext);
 
   const [currency, setCurrency] = useState(
-    () => localStorage.getItem("currency") || "usd"
+    () => localStorage.getItem("currency") || "usd",
   );
-  // const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   const [notifications, setNotifications] = useState(() => {
     const saved = localStorage.getItem("notifications");
@@ -101,7 +100,17 @@ const SettingsPage = () => {
               label="Enable email reminders for upcoming payments"
             />
           </Paper>
-          <Button variant="outlined" onClick={handleSave} sx={{ mt: 2 }}>
+          <Button
+            variant="outlined"
+            onClick={handleSave}
+            sx={{
+              mt: 2,
+              "&:focus": { outline: "none" },
+              "&.Mui-focusVisible": {
+                outline: "none",
+              },
+            }}
+          >
             Save Settings
           </Button>
         </Box>

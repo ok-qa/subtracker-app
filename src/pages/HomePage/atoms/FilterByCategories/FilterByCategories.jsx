@@ -1,83 +1,80 @@
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
-  Button,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Checkbox,
-  Typography,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { Box, Chip, Typography } from "@mui/material";
 import { useSubscriptions } from "../../../../context/SubscriptionContext";
 
-const CategoryFilter = ({ open, onClose }) => {
-  const { categoryFilters, setCategoryFilters, categories } =
-    useSubscriptions();
+const CategoryFilter = () => {
+  const {
+    categories: { categoriesData, categoryFilters },
+    setCategories,
+  } = useSubscriptions();
 
   const toggleCategory = (filterId) => {
-    setCategoryFilters((prev) =>
-      prev.includes(filterId)
-        ? prev.filter((id) => id !== filterId)
-        : [...prev, filterId],
-    );
+    setCategories((prev) => ({
+      ...prev,
+      categoryFilters: prev.categoryFilters.includes(filterId)
+        ? prev.categoryFilters.filter((id) => id !== filterId)
+        : [...prev.categoryFilters, filterId],
+    }));
   };
 
-  const clearAll = () => setCategoryFilters([]);
-
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs" autoFocus>
-      <DialogTitle>
-        <Typography variant="h5" component="span">
-          Filter by Categories
-        </Typography>
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
+    <>
+      <Typography
+        variant="subtitle1"
+        sx={{
+          mb: 1,
+          mt: 2,
+          color: "#64748B",
+          fontWeight: 700,
+          fontSize: "0.9rem",
+          textTransform: "uppercase",
+        }}
+      >
+        Categories
+      </Typography>
 
-      <DialogContent dividers>
-        <List>
-          {categories.map((cat) => (
-            <ListItem disablePadding key={cat.filterId}>
-              <ListItemButton
-                onClick={() => toggleCategory(cat.filterId)}
-                dense
-              >
-                <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    checked={categoryFilters.includes(cat.filterId)}
-                    disableRipple
-                  />
-                </ListItemIcon>
-                <ListItemText primary={cat.name} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </DialogContent>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 1,
+        }}
+      >
+        {categoriesData.map((cat) => {
+          const selected = categoryFilters.includes(cat.filterId);
 
-      <DialogActions>
-        <Button onClick={clearAll}>Clear All</Button>
-        <Button onClick={onClose} variant="contained">
-          Done
-        </Button>
-      </DialogActions>
-    </Dialog>
+          const getChipColor = (theme, selected) => {
+            const isDarkMode = theme.palette.mode === "dark";
+
+            if (isDarkMode) {
+              return {
+                color: selected ? "#6566ef" : "#64748B",
+                borderColor: selected ? "#6566ef" : "#64748B",
+                bgcolor: selected ? "#4e46e515" : "none",
+              };
+            }
+            return {
+              color: selected ? "#4F46E5" : "#64748B",
+              borderColor: selected ? "#4F46E5" : "#64748B",
+              bgcolor: selected ? "#4e46e515" : "none",
+            };
+          };
+
+          return (
+            <Chip
+              key={cat.filterId}
+              label={cat.name}
+              sx={(theme) => ({
+                fontWeight: 700,
+                ...getChipColor(theme, selected),
+              })}
+              clickable
+              variant="outlined"
+              onClick={() => toggleCategory(cat.filterId)}
+            />
+          );
+        })}
+      </Box>
+    </>
   );
 };
 
