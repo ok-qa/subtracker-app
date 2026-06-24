@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function AddSubscriptionBtn() {
   const navigate = useNavigate();
@@ -14,10 +15,21 @@ export default function AddSubscriptionBtn() {
       <Button
         variant="contained"
         color="primary"
-        sx={{ borderRadius: "20px", marginRight: "30px" }}
+        sx={{
+          borderRadius: "20px",
+          "&:focus": { outline: "none" },
+          "&.Mui-focusVisible": {
+            outline: "none",
+          },
+        }}
         onClick={() => navigate("/add")}
       >
-        Add Subscription
+        <AddIcon fontSize="small" />
+        <Typography
+          sx={{ ml: 1, fontWeight: 700, display: { xs: "none", sm: "block" } }}
+        >
+          Add subscription
+        </Typography>
       </Button>
     </Box>
   );

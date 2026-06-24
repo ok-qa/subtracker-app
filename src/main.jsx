@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import App from "./App.jsx";
 import { SubscriptionProvider } from "./context/SubscriptionContext.jsx";
 import { ThemeContextProvider } from "./context/ThemeContext.jsx";
-import AppTheme from "./theme/AppTheme.jsx";
+
 import { store } from "./store/index.js";
 import "./index.css";
 
@@ -17,12 +17,10 @@ root.render(
       <BrowserRouter>
         <SubscriptionProvider>
           <ThemeContextProvider>
-            <AppTheme>
-              <App />
-            </AppTheme>
+            <App />
           </ThemeContextProvider>
         </SubscriptionProvider>
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

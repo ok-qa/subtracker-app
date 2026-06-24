@@ -1,7 +1,7 @@
 export const STORAGE_KEY = "subscriptions";
 
 export const sortOptions = [
-  { name: " —— ", value: "default" },
+  { name: "Default", value: "default" },
   { name: "Name A → Z", value: "name-asc" },
   { name: "Name Z → A", value: "name-desc" },
   { name: "Price Low → High", value: "price-asc" },

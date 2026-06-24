@@ -8,11 +8,16 @@ import {
   Paper,
   Link,
   Alert,
+  Container,
 } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { forgotPassword } from "../../api";
 import { CheckCircleRounded } from "@mui/icons-material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import AppBackground from "../../components/AppBackground/AppBackground";
+import AuthSubmitBtn from "../../components/AuthSubmitBtn/AuthSubmitBtn";
+import LogoTitleContainer from "../../components/LogoTitleContainer/LogoTitleContainer";
 
 const ForgotPasswordPage = () => {
   const [success, setSuccess] = useState(false);
@@ -46,66 +51,81 @@ const ForgotPasswordPage = () => {
   });
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <Paper sx={{ p: 4, width: 350 }}>
-        <Typography variant="h5" mb={2}>
-          Forgot Password
-        </Typography>
-        <Typography variant="body2" mb={3}>
-          Enter your email to receive a reset link.
-        </Typography>
+    <AppBackground isAuth childrenWrapperStyles={{ p: { xs: 3, sm: 5 } }}>
+      <Container maxWidth="xs">
+        <LogoTitleContainer />
+        <Paper elevation={3} sx={{ p: 4, width: 350 }}>
+          <Typography variant="h5" mb={2}>
+            Forgot your password?
+          </Typography>
+          <Typography variant="body2" mb={3} sx={{ color: "#647488" }}>
+            No worries — enter your email and we'll send you a reset link.
+          </Typography>
 
-        <form onSubmit={formik.handleSubmit}>
-          <TextField
-            fullWidth
-            id="email"
-            name="email"
-            label="Email"
-            type="email"
-            margin="normal"
-            required
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-            disabled={submitted}
-          />
+          <form onSubmit={formik.handleSubmit}>
+            <TextField
+              fullWidth
+              id="email"
+              name="email"
+              label="Email address"
+              type="email"
+              margin="normal"
+              required
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
+              disabled={submitted}
+            />
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 2 }}
-            disabled={formik.isSubmitting || submitted}
-          >
-            {formik.isSubmitting ? "Sending..." : "Send Reset Link"}
-          </Button>
-        </form>
-        {success && (
-          <Alert
-            icon={<CheckCircleRounded fontSize="inherit" />}
-            severity="success"
-            sx={{ mt: 2 }}
-          >
-            Please check your email and follow the link we sent.
-          </Alert>
-        )}
+            {success && (
+              <Alert
+                icon={<CheckCircleRounded fontSize="inherit" />}
+                severity="success"
+                elevation={2}
+                sx={{
+                  mt: 2,
+                  border: "1px solid #E2E8F0",
+                  backgroundColor: "#aff2ba3b",
+                }}
+              >
+                <Typography sx={{ fontWeight: 600 }}>
+                  {" "}
+                  Reset link sent
+                </Typography>
+                <Typography>
+                  Please check your email and follow the link we sent.
+                </Typography>
+              </Alert>
+            )}
 
-        <Typography mt={2} textAlign="center">
-          <Link component="button" onClick={() => navigate("/signin")}>
+            <AuthSubmitBtn
+              disabled={formik.isSubmitting || submitted || formik.errors.email}
+              title={formik.isSubmitting ? "Sending..." : "Send Reset Link"}
+            />
+          </form>
+        </Paper>
+
+        <Link
+          component="button"
+          onClick={() => navigate("/signin")}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            mt: 2,
+            width: "100%",
+            color: " #6366F1",
+          }}
+        >
+          <ArrowBackIcon fontSize="extra-small" />
+          <Typography textAlign="center" fontSize={14} fontWeight={600}>
             Back to Sign In
-          </Link>
-        </Typography>
-      </Paper>
-    </Box>
+          </Typography>
+        </Link>
+      </Container>
+    </AppBackground>
   );
 };
 
