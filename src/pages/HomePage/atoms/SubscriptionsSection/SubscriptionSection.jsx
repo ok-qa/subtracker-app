@@ -75,7 +75,7 @@ const SubscriptionSection = () => {
               border: `1px solid ${theme.palette.divider}`,
               borderRadius: 2,
               p: 0.5,
-              bgcolor: "#FFFFFF",
+              bgcolor: theme.palette.mode === "dark" ? "#0F172A" : "#FFFFFF",
             })}
           >
             <Tooltip title="Card View">
