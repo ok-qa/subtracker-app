@@ -30,8 +30,9 @@ const SubscriptionGrid = () => {
   if (subscriptions.length === 0) {
     return (
       <Box
-        sx={{
-          bgcolor: "#FFFFFF",
+        sx={(theme) => ({
+          bgcolor: theme.palette.mode === "dark" ? "#0F172A" : "#FFFFFF",
+          color: theme.palette.mode === "dark" ? "#64748B" : "#0F172A",
           borderRadius: 1,
           border: "dashed, 1px",
           borderColor: "#F5F7FB",
@@ -41,7 +42,7 @@ const SubscriptionGrid = () => {
           alignItems: "center",
           px: 2,
           py: 6,
-        }}
+        })}
       >
         <Typography variant="h6" align="center" sx={{ fontWeight: 700 }}>
           No subscriptions yet

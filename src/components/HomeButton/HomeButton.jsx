@@ -8,6 +8,7 @@ const HomeButton = () => {
   return (
     <IconButton
       onClick={() => navigate("/")}
+      edge="start"
       sx={{
         color: "inherit",
         padding: 0,
@@ -16,7 +17,7 @@ const HomeButton = () => {
         },
         "&:focus": { outline: "none" },
         "&:focus-visible": { outline: "none" },
-        ml: 3,
+        px: 3,
       }}
       disableRipple
     >

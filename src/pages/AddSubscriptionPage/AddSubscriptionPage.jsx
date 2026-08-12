@@ -1,11 +1,8 @@
+import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
-import SubscriptionForm from "../../components/SubscriptionForm/SubscriptionForm";
-import Header from "../../components/Header/Header";
 import { useSubscriptions } from "../../context/SubscriptionContext";
-import Footer from "../../components/Footer/Footer";
-
-import styles from "./AddSubscriptionPage.module.css";
+import SubscriptionForm from "../../components/SubscriptionForm/SubscriptionForm";
+import Layout from "../../components/Layout/Layout";
 
 const AddSubscriptionPage = () => {
   const { addSubscription } = useSubscriptions();
@@ -17,15 +14,13 @@ const AddSubscriptionPage = () => {
   };
 
   return (
-    <div className={styles.addSubscriptionPage}>
-      <Header />
+    <Layout>
       <SubscriptionForm
         onSubmit={handleSubmit}
         isEdit={false}
         defaultValues={null}
       />
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 

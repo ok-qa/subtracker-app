@@ -25,7 +25,7 @@ const SortSubscriptionSelect = () => {
         sx={(theme) => ({
           borderRadius: "20px",
           backgroundColor:
-            theme.palette.mode === "dark" ? "#0F172A" : "#F5F7FB",
+            theme.palette.mode === "dark" ? "#0F172A" : "#FFFFFF",
           border: "1px solid",
           borderColor: "#64748B",
           "&:hover": {

@@ -72,7 +72,7 @@ const SubscriptionList = () => {
                     bg: "rgba(16, 185, 129, 0.12)",
                   };
           return (
-            <ListItem key={subscription._id}>
+            <ListItem key={subscription._id} sx={{ px: 0 }}>
               <Card
                 variant="outlined"
                 sx={{
@@ -179,7 +179,7 @@ const SubscriptionList = () => {
 
                 <CardActions
                   sx={{
-                    justifyContent: "flex-start",
+                    justifyContent: "flex-end",
                     flex: 1,
                   }}
                 >
