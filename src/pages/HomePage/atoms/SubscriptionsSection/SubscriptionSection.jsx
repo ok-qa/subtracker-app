@@ -27,6 +27,7 @@ const SubscriptionSection = () => {
 
   const [viewType, setViewType] = useState(SubViewType.GRID);
   const isGrid = viewType === SubViewType.GRID;
+  const hasSubscriptions = totalItems > 0;
 
   return (
     <Box sx={{ py: 4, px: 6, flex: 1 }}>
@@ -86,6 +87,9 @@ const SubscriptionSection = () => {
                   bgcolor: isGrid ? theme.palette.primary.main : "transparent",
                   color: isGrid ? "#FFFFFF" : "#64748B",
                   "&:focus": { outline: "none" },
+                  "&:hover": {
+                    ...(isGrid && { bgcolor: theme.palette.primary.main }),
+                  },
                   "&.Mui-focusVisible": {
                     outline: "none",
                   },
@@ -99,11 +103,15 @@ const SubscriptionSection = () => {
             <Tooltip title="Row View">
               <IconButton
                 size="small"
+                disabled={!hasSubscriptions}
                 onClick={() => setViewType(SubViewType.LIST)}
                 sx={(theme) => ({
                   bgcolor: !isGrid ? theme.palette.primary.main : "transparent",
                   color: !isGrid ? "#FFFFFF" : "#64748B",
                   "&:focus": { outline: "none" },
+                  "&:hover": {
+                    ...(!isGrid && { bgcolor: theme.palette.primary.main }),
+                  },
                   "&.Mui-focusVisible": {
                     outline: "none",
                   },

@@ -38,7 +38,6 @@ const Header = ({ open, setOpen }) => {
           px: 2,
         }}
       >
-        {!isHomePage && <HomeButton />}
 
         <Box
           sx={{
@@ -46,7 +45,7 @@ const Header = ({ open, setOpen }) => {
             alignItems: "center",
           }}
         >
-          {isHomePage && (
+          {isHomePage ? (
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -70,6 +69,8 @@ const Header = ({ open, setOpen }) => {
             >
               <MenuIcon />
             </IconButton>
+          ) : (
+            <HomeButton />
           )}
         </Box>
 
