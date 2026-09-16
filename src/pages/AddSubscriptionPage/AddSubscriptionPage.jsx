@@ -1,31 +1,41 @@
+import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
-import SubscriptionForm from "../../components/SubscriptionForm/SubscriptionForm";
-import Header from "../../components/Header/Header";
 import { useSubscriptions } from "../../context/SubscriptionContext";
-import Footer from "../../components/Footer/Footer";
+import SubscriptionForm from "../../components/SubscriptionForm/SubscriptionForm";
+import Layout from "../../components/Layout/Layout";
 
-import styles from "./AddSubscriptionPage.module.css";
+import NewSubscriptionForm from "../../components/NewSubscriptionForm/NewSubscriptionForm";
+import { useSelector } from "react-redux";
 
 const AddSubscriptionPage = () => {
   const { addSubscription } = useSubscriptions();
   const navigate = useNavigate();
+  const { featureFlags } = useSelector((state) => state.app);
 
   const handleSubmit = (subscription) => {
     addSubscription(subscription);
     navigate("/");
   };
+  if (!featureFlags) {
+    return;
+  }
 
   return (
-    <div className={styles.addSubscriptionPage}>
-      <Header />
-      <SubscriptionForm
-        onSubmit={handleSubmit}
-        isEdit={false}
-        defaultValues={null}
-      />
-      <Footer />
-    </div>
+    <Layout>
+      {!featureFlags.NEW_SUBSCRIPTION_FORM ? (
+        <SubscriptionForm
+          onSubmit={handleSubmit}
+          isEdit={false}
+          defaultValues={null}
+        />
+      ) : (
+        <NewSubscriptionForm
+          onSubmit={handleSubmit}
+          isEdit={false}
+          defaultValues={null}
+        />
+      )}
+    </Layout>
   );
 };
 
