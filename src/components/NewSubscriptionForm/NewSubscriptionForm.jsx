@@ -45,7 +45,6 @@ const NewSubscriptionForm = ({ onSubmit, defaultValues, isEdit = false }) => {
   }, [defaultValues]);
 
   const handleNewDateChange = (value) => {
-    console.log("new handle change value: ", value);
     setForm((prev) => ({ ...prev, endDate: value }));
   };
 

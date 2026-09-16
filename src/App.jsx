@@ -40,7 +40,6 @@ function App() {
   useEffect(() => {
     const fetchFeatureFlags = async () => {
       const featureFlags = await getFeatureFlags();
-      console.log("useEffect featureFlags: ", featureFlags);
       dispatch(setFeatureFlags(featureFlags));
     };
     fetchFeatureFlags();
