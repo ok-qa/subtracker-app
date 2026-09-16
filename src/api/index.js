@@ -5,6 +5,7 @@ import { subscriptionsRequests } from "./subscriptions";
 import { authRequests } from "./auth";
 import { userRequests } from "./user";
 import { getSortParamsByOption } from "../services/subscriptionService";
+import { featureFlagsRequests } from "./featureFlags";
 
 export const api = {
   ...authRequests(),
@@ -12,6 +13,7 @@ export const api = {
   ...termsRequest(),
   ...categoriesRequest(),
   ...userRequests(),
+  ...featureFlagsRequests(),
   getBaseURL: () => axiosInstance.defaults.baseURL,
 };
 
@@ -135,6 +137,19 @@ export const getTerms = async () => {
     return data;
   } catch (error) {
     console.error("Failed to load terms:", error);
+    return [];
+  }
+};
+
+// get featureFlags
+export const getFeatureFlags = async () => {
+  try {
+    const {
+      data: { data },
+    } = await api.getFeatureFlagsRequest();
+    return data;
+  } catch (error) {
+    console.error("Failed to get feature flags", error);
     return [];
   }
 };
