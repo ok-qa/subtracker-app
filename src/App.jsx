@@ -1,6 +1,6 @@
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import HomePage from "./pages/HomePage/HomePage";
 import AddSubscriptionPage from "./pages/AddSubscriptionPage/AddSubscriptionPage";
 import EditSubscriptionPage from "./pages/EditSubscriptionPage/EditSubscriptionPage";
@@ -13,6 +13,8 @@ import ProfilePage from "./pages/UserProfilePage/ProfilePage";
 
 import styles from "./App.module.css";
 import { OAuthCallback } from "./components/OAuthCallback/OAuthCallback";
+import { getFeatureFlags } from "./api";
+import { setFeatureFlags } from "./store/slices/app";
 
 const authRoutes = [
   "/reset-password",
@@ -25,6 +27,7 @@ const authRoutes = [
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   const { token } = useSelector((state) => state.app);
 
@@ -33,6 +36,14 @@ function App() {
       navigate("/signin");
     }
   }, [token, location.pathname, navigate]);
+
+  useEffect(() => {
+    const fetchFeatureFlags = async () => {
+      const featureFlags = await getFeatureFlags();
+      dispatch(setFeatureFlags(featureFlags));
+    };
+    fetchFeatureFlags();
+  }, [dispatch]);
 
   return (
     <div className={styles.app}>
