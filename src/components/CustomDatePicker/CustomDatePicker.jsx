@@ -47,6 +47,17 @@ function SubscriptionDatePicker({ value, onChange }) {
               },
             }),
           },
+          openPickerButton: {
+            sx: {
+              "&:focus": {
+                outline: "none",
+              },
+              "&:focus-visible": {
+                outline: "none",
+                boxShadow: "none",
+              },
+            },
+          },
           popper: {
             sx: (theme) => ({
               "& .MuiPaper-root": {
